@@ -36,7 +36,7 @@ public class distractiontesting : MonoBehaviour
             rt = Quaternion.RotateTowards(transform.rotation, targetRt, turnSpeed * Time.deltaTime);
 
             // Move towards distraction
-            if (distractionDistance > objectDistMin)
+            if (Quaternion.Angle(rt, targetRt) < rotationMin)
             {
                 mv = Vector3.MoveTowards(rb.position, distractionSource.transform.position, moveSpeed * Time.deltaTime);
                 rb.MovePosition(mv);
