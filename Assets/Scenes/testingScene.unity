@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -408,7 +408,7 @@ Transform:
   m_GameObject: {fileID: 1490938168}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.35, y: 0.25, z: -4.69}
+  m_LocalPosition: {x: 3.48, y: 0.25, z: -2.4}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -477,6 +477,9 @@ MonoBehaviour:
   distractionSource: {fileID: 1490938168}
   distractionProxRequirement: 5
   turnSpeed: 60
+  moveSpeed: 2
+  rotationMin: 15
+  objectDistMin: 3
 --- !u!65 &1571502416
 BoxCollider:
   m_ObjectHideFlags: 0
