@@ -40,8 +40,10 @@ public class distractiontesting : MonoBehaviour
         // calculate distance b/w enemy and source
         distractionDistance = Vector3.Distance(rb.position, distractionSource.transform.position);
 
+        // ambient behavior
         if (st == "ambient")
         {
+
             // If distraction is close enough, enter targeting mode
             if (distractionDistance <= distractionRadius)
             {
@@ -49,6 +51,7 @@ public class distractiontesting : MonoBehaviour
             }
         }
 
+        // targeting behavior
         if (st == "targeting")
         {
             // Rotate towards distraction
@@ -67,6 +70,7 @@ public class distractiontesting : MonoBehaviour
 
         }
 
+        // pathing behavior
         if (st == "pathing")
         {
             mv = Vector3.MoveTowards(rb.position, distractionSource.transform.position, moveSpeed * Time.deltaTime);
