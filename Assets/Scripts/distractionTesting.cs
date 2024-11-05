@@ -10,14 +10,14 @@ using UnityEngine.UI;
 
 public class distractiontesting : MonoBehaviour
 {
-    // Public var
+    // Public vars
     public float moveSpeed;
     public LayerMask floormask;
 
     public GameObject distraction;
     public GameObject player;
 
-    public TMPro.TextMeshPro output;
+    public TMPro.TMP_Text output;
 
     // Enemy vars
     Rigidbody rb;
@@ -27,19 +27,17 @@ public class distractiontesting : MonoBehaviour
     {
         idle,
         wandering,
-        investigating,
-        seeking
+        seeking,
+        distracted,
+        chasing
     }
     
     states currState = states.idle;
+
+    // Timer vars
     private float waitTimer = 0.0f;
-    private GameObject target;
-    
+    private float distractedTimer;
 
-    
-
-    // Distraction vars
-    private float distractionDistance;
 
     // Start is called before the first frame update
     void Start()
@@ -50,41 +48,80 @@ public class distractiontesting : MonoBehaviour
         nma.speed = moveSpeed;
     }
 
+    // Update function
     private void Update()
     {
+        testDistractionProx();   
         switch (currState)
         {
             case states.idle:
-                testProx();
                 doIdle();
                 break;
             case states.wandering:
-                testProx();
                 doWander();
                 break;
-            case states.investigating:
-                doInvestigating();
+            case states.seeking:
+                doSeeking();
+                break;
+            case states.distracted:
+                doDistracted();
                 break;
         }
 
-        output.text = currState.ToString();
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.name == "coin")
+        {
+            output.text = "yes";
+        }
+    }
+
+    // See if player is near
+    private void testPlayerProx()
+    {
+        if (currState != states.chasing)
+        {
+            if (Vector3.Distance(transform.position, player.transform.position) < 5f)
+            {
+                nma.SetDestination(player.transform.position);
+                currState = states.chasing;
+            }
+        }
+    }
+
+    // See if distraction is near
+    private void testDistractionProx()
+    {
+        if (currState == states.idle || currState == states.wandering)
+        {
+            if (Vector3.Distance(transform.position, distraction.transform.position) < 5f)
+            {
+                nma.stoppingDistance = 2f;
+                nma.SetDestination(distraction.transform.position);
+                currState = states.seeking;
+            }
+        }
     }
 
     // Wandering AI written by Innocent Qwa on youtube
     // https://www.youtube.com/watch?v=K2yirE5W2aU
+    // Code section below v
 
     private void doIdle()
     {
+
         if (waitTimer > 0)
         {
             waitTimer -= Time.deltaTime;
             return;
         }
 
+        //nma.stoppingDistance = 1f; // added by me
         nma.SetDestination(RandomNavSphere(transform.position, 10.0f, floormask));
         currState = states.wandering;
 
-        
     }
 
     private void doWander()
@@ -108,21 +145,29 @@ public class distractiontesting : MonoBehaviour
         return navHit.position;
     }
 
-    private void testProx()
-    {
-        if (Vector3.Distance(transform.position, distraction.transform.position) < 5f)
-        {
-            nma.SetDestination(distraction.transform.position);
-            currState = states.investigating;
-            
-        }
-    }
+    // Innocent Qwa's Code section above ^
 
-    private void doInvestigating()
+    
+
+    private void doSeeking()
     {
         if (nma.pathStatus != NavMeshPathStatus.PathComplete)
         {
             return;
         }
+
+        distractedTimer = 30f;
+        currState = states.idle;
+    }
+
+    private void doDistracted()
+    {
+        if (distractedTimer > 0)
+        {
+            distractedTimer -= Time.deltaTime;
+            return;
+        }
+
+        currState = states.idle;
     }
 }
