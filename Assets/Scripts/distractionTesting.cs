@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
@@ -24,6 +25,8 @@ public class distractiontesting : MonoBehaviour
     Quaternion rt = Quaternion.identity;
     string st = "ambient";
 
+    NavMeshAgent nma;
+
     // Distraction vars
     private float distractionDistance;
 
@@ -32,10 +35,15 @@ public class distractiontesting : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         output = writeOut.GetComponent<Text>();
+        nma = GetComponent<NavMeshAgent>();
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    private void FixedUpdate()
+    {
+        nma.destination = distractionSource.transform.position;
+    }
+
+    void notCalled()
     {
         // calculate distance b/w enemy and source
         distractionDistance = Vector3.Distance(rb.position, distractionSource.transform.position);
