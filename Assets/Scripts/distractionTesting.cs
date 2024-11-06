@@ -1,84 +1,173 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class distractiontesting : MonoBehaviour
 {
-    // Public var
-    public GameObject distractionSource;
-    public float distractionRadius;
-    public float turnSpeed;
+    // Public vars
     public float moveSpeed;
-    public float rotationMin;
-    public float investigationRadius = 4f;
-    public TMP_Text writeOut;
-    Text output;
+    public LayerMask floormask;
+
+    public GameObject distraction;
+    public GameObject player;
+
+    public TMPro.TMP_Text output;
 
     // Enemy vars
     Rigidbody rb;
-    Vector3 mv;
-    Quaternion rt = Quaternion.identity;
-    string st = "ambient";
+    NavMeshAgent nma;
 
-    // Distraction vars
-    private float distractionDistance;
+    enum states
+    {
+        idle,
+        wandering,
+        seeking,
+        distracted,
+        chasing
+    }
+    
+    states currState = states.idle;
+
+    // Timer vars
+    private float waitTimer = 0.0f;
+    private float distractedTimer;
+
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        output = writeOut.GetComponent<Text>();
+        nma = GetComponent<NavMeshAgent>();
+
+        nma.speed = moveSpeed;
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    // Update function
+    private void Update()
     {
-        // calculate distance b/w enemy and source
-        distractionDistance = Vector3.Distance(rb.position, distractionSource.transform.position);
-
-        if (st == "ambient")
+        testDistractionProx();   
+        switch (currState)
         {
-            // If distraction is close enough, enter targeting mode
-            if (distractionDistance <= distractionRadius)
-            {
-                st = "targeting";
-            }
+            case states.idle:
+                doIdle();
+                break;
+            case states.wandering:
+                doWander();
+                break;
+            case states.seeking:
+                doSeeking();
+                break;
+            case states.distracted:
+                doDistracted();
+                break;
         }
 
-        if (st == "targeting")
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.name == "coin")
         {
-            // Rotate towards distraction
-            Vector3 direction = (distractionSource.transform.position - rb.position).normalized;
-            Quaternion targetRt = Quaternion.LookRotation(direction);
-            rt = Quaternion.RotateTowards(transform.rotation, targetRt, turnSpeed * Time.deltaTime);
-            rb.MoveRotation(rt);
-
-            // Move towards distraction
-            if (Quaternion.Angle(rt, targetRt) < rotationMin)
-            {
-                st = "pathing";
-            }
-
-
-
+            output.text = "yes";
         }
+    }
 
-        if (st == "pathing")
+    // See if player is near
+    private void testPlayerProx()
+    {
+        if (currState != states.chasing)
         {
-            mv = Vector3.MoveTowards(rb.position, distractionSource.transform.position, moveSpeed * Time.deltaTime);
-            rb.MovePosition(mv);
-
-            // Investigate if close enough
-            if (distractionDistance <= investigationRadius)
+            if (Vector3.Distance(transform.position, player.transform.position) < 5f)
             {
-                st = "investigating";
+                nma.SetDestination(player.transform.position);
+                currState = states.chasing;
             }
         }
+    }
 
-        writeOut.text = distractionDistance.ToString("F2");
+    // See if distraction is near
+    private void testDistractionProx()
+    {
+        if (currState == states.idle || currState == states.wandering)
+        {
+            if (Vector3.Distance(transform.position, distraction.transform.position) < 5f)
+            {
+                nma.stoppingDistance = 2f;
+                nma.SetDestination(distraction.transform.position);
+                currState = states.seeking;
+            }
+        }
+    }
+
+    // Wandering AI written by Innocent Qwa on youtube
+    // https://www.youtube.com/watch?v=K2yirE5W2aU
+    // Code section below v
+
+    private void doIdle()
+    {
+
+        if (waitTimer > 0)
+        {
+            waitTimer -= Time.deltaTime;
+            return;
+        }
+
+        //nma.stoppingDistance = 1f; // added by me
+        nma.SetDestination(RandomNavSphere(transform.position, 10.0f, floormask));
+        currState = states.wandering;
+
+    }
+
+    private void doWander()
+    {
+        if (nma.pathStatus != NavMeshPathStatus.PathComplete)
+        {
+            return;
+        }
+
+        waitTimer = UnityEngine.Random.Range(1.0f, 4.0f);
+        currState = states.idle;
+    }
+
+    Vector3 RandomNavSphere(Vector3 origin, float distance, LayerMask layerMask)
+    {
+        Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * distance;
+        randomDirection += origin;
+        NavMeshHit navHit;
+        NavMesh.SamplePosition(randomDirection, out navHit, distance, layerMask);
+
+        return navHit.position;
+    }
+
+    // Innocent Qwa's Code section above ^
+
+    
+
+    private void doSeeking()
+    {
+        if (nma.pathStatus != NavMeshPathStatus.PathComplete)
+        {
+            return;
+        }
+
+        distractedTimer = 30f;
+        currState = states.idle;
+    }
+
+    private void doDistracted()
+    {
+        if (distractedTimer > 0)
+        {
+            distractedTimer -= Time.deltaTime;
+            return;
+        }
+
+        currState = states.idle;
     }
 }
