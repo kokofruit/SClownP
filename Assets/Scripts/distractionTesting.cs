@@ -51,7 +51,6 @@ public class distractiontesting : MonoBehaviour
     // Update function
     private void Update()
     {
-        testDistractionProx();   
         switch (currState)
         {
             case states.idle:
@@ -68,40 +67,32 @@ public class distractiontesting : MonoBehaviour
                 break;
         }
 
+        output.text = currState.ToString();
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.name == "coin")
+        if (other.gameObject == player)
         {
-            output.text = "yes";
+            nma.SetDestination(player.transform.position);
+            currState = states.chasing;
         }
-    }
-
-    // See if player is near
-    private void testPlayerProx()
-    {
-        if (currState != states.chasing)
+        else if (other.gameObject == distraction)
         {
-            if (Vector3.Distance(transform.position, player.transform.position) < 5f)
+            if (currState == states.idle || currState == states.wandering)
             {
-                nma.SetDestination(player.transform.position);
-                currState = states.chasing;
-            }
-        }
-    }
-
-    // See if distraction is near
-    private void testDistractionProx()
-    {
-        if (currState == states.idle || currState == states.wandering)
-        {
-            if (Vector3.Distance(transform.position, distraction.transform.position) < 5f)
-            {
-                nma.stoppingDistance = 2f;
+                //nma.stoppingDistance = 2f;
                 nma.SetDestination(distraction.transform.position);
                 currState = states.seeking;
             }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject == player)
+        {
+            currState = states.idle;
         }
     }
 
