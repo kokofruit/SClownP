@@ -6,14 +6,17 @@ using UnityEngine.InputSystem;
 public class playerBehavior : MonoBehaviour
 {
 
-    private float tossCooldown = 0f;
+    public float tossCooldown;
+    private float tossTimer = 0f;
     public GameObject coin;
     public GameObject player;
+    public Camera cam;
+    public float throwForce;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
@@ -31,7 +34,17 @@ public class playerBehavior : MonoBehaviour
 
     void tossCoin()
     {
-        coin.transform.position = player.transform.position;
-        tossCooldown = 30f;
+        //tossTimer = tossCooldown;
+        //coin.transform.position = player.transform.position;
+        // Get coin rigidbody
+        Rigidbody coinRb = coin.GetComponent<Rigidbody>();
+
+        // calculate direction
+        Vector3 forceDirection = cam.transform.forward;
+        //RaycastHit hit;
+
+        // add force
+       
+
     }
 }

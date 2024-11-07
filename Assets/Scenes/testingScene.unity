@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1063,7 +1063,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4459864850019384738, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
   m_PrefabInstance: {fileID: 2104354995}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1542517494
+--- !u!114 &1542517500
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1072,11 +1072,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1542517480}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d231f6b95085d4349b8882a283b89d89, type: 3}
+  m_Script: {fileID: 11500000, guid: e145990d5fdd9704ba7c5d0404cbb08a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coin: {fileID: 962486837}
-  player: {fileID: 1542517480}
+  cam: {fileID: 15923653}
+  attackPoint: {fileID: 1542517488}
+  objectToThrow: {fileID: 1105311939}
+  totalThrows: 25
+  throwCooldown: 0
+  throwKey: 324
+  throwForce: 10
+  throwUpwardForce: 4
 --- !u!1 &1571502413
 GameObject:
   m_ObjectHideFlags: 0
@@ -1505,10 +1511,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4459864850019384750, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1542517494}
+      addedObject: {fileID: 1542517487}
     - targetCorrespondingSourceObject: {fileID: 4459864850019384750, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1542517487}
+      addedObject: {fileID: 1542517500}
     - targetCorrespondingSourceObject: {fileID: 4459864851310106424, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
       insertIndex: -1
       addedObject: {fileID: 15923656}
