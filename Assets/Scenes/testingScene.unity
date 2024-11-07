@@ -216,6 +216,11 @@ MonoBehaviour:
   _PostProcessShaderAccurate: {fileID: 4800000, guid: 2ebed186567d3c244a87538744a62920, type: 3}
   _PixelationShader: {fileID: 4800000, guid: f2da0e2a14a532548b5db043244b3df1, type: 3}
   _InterlacingShader: {fileID: 4800000, guid: 03ebd34214b41ef459d7ee6753b062be, type: 3}
+--- !u!20 &15923658 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 4459864851310106426, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
+  m_PrefabInstance: {fileID: 2104354995}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &98206598
 GameObject:
   m_ObjectHideFlags: 0
@@ -728,7 +733,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b99d291038febf24fac3079e42a68858, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4
+      value: 4.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b99d291038febf24fac3079e42a68858, type: 3}
       propertyPath: m_LocalPosition.z
@@ -736,11 +741,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b99d291038febf24fac3079e42a68858, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.99228877
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b99d291038febf24fac3079e42a68858, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.123947844
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b99d291038febf24fac3079e42a68858, type: 3}
       propertyPath: m_LocalRotation.y
@@ -752,7 +757,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b99d291038febf24fac3079e42a68858, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 14.24
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b99d291038febf24fac3079e42a68858, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -783,6 +788,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b99d291038febf24fac3079e42a68858, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1105311945}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b99d291038febf24fac3079e42a68858, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1105311948}
   m_SourcePrefab: {fileID: 100100000, guid: b99d291038febf24fac3079e42a68858, type: 3}
 --- !u!1 &1059846460
 GameObject:
@@ -1032,6 +1040,20 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 8
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1105311948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1105311939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c11af320a3bde1d439c4c2e3628a6e4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coin: {fileID: 0}
+  isGrounded: 0
 --- !u!1 &1542517480 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4459864850019384750, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
@@ -1063,7 +1085,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4459864850019384738, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
   m_PrefabInstance: {fileID: 2104354995}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1542517500
+--- !u!114 &1542517506
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1072,17 +1094,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1542517480}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e145990d5fdd9704ba7c5d0404cbb08a, type: 3}
+  m_Script: {fileID: 11500000, guid: d231f6b95085d4349b8882a283b89d89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 15923653}
-  attackPoint: {fileID: 1542517488}
-  objectToThrow: {fileID: 1105311939}
-  totalThrows: 25
-  throwCooldown: 0
-  throwKey: 324
-  throwForce: 10
-  throwUpwardForce: 4
+  tossCooldown: 0
+  coin: {fileID: 1105311939}
+  player: {fileID: 1542517480}
+  cam: {fileID: 15923658}
+  throwForce: 5
+  throwUpwardForce: 10
+  output: {fileID: 1062115112}
 --- !u!1 &1571502413
 GameObject:
   m_ObjectHideFlags: 0
@@ -1258,7 +1279,7 @@ MonoBehaviour:
     m_Bits: 1
   distraction: {fileID: 1105311939}
   player: {fileID: 1542517480}
-  output: {fileID: 1062115112}
+  output: {fileID: 0}
 --- !u!1 &1786769394
 GameObject:
   m_ObjectHideFlags: 0
@@ -1514,7 +1535,7 @@ PrefabInstance:
       addedObject: {fileID: 1542517487}
     - targetCorrespondingSourceObject: {fileID: 4459864850019384750, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1542517500}
+      addedObject: {fileID: 1542517506}
     - targetCorrespondingSourceObject: {fileID: 4459864851310106424, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
       insertIndex: -1
       addedObject: {fileID: 15923656}
