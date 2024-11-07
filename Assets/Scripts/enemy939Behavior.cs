@@ -5,16 +5,17 @@ using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
-public class distractiontesting : MonoBehaviour
+
+public class enemy939Behavior : MonoBehaviour
 {
     // Public vars
     public float moveSpeed;
     public LayerMask floormask;
 
     public GameObject distraction;
+    
     public GameObject player;
 
     public TMPro.TMP_Text output;
@@ -31,7 +32,7 @@ public class distractiontesting : MonoBehaviour
         distracted,
         chasing
     }
-    
+
     states currState = states.idle;
 
     // Timer vars
@@ -46,6 +47,8 @@ public class distractiontesting : MonoBehaviour
         nma = GetComponent<NavMeshAgent>();
 
         nma.speed = moveSpeed;
+
+        
     }
 
     // Update function
@@ -66,7 +69,6 @@ public class distractiontesting : MonoBehaviour
                 doDistracted();
                 break;
         }
-
         output.text = currState.ToString();
     }
 
@@ -79,12 +81,9 @@ public class distractiontesting : MonoBehaviour
         }
         else if (other.gameObject == distraction)
         {
-            if (currState == states.idle || currState == states.wandering)
-            {
-                //nma.stoppingDistance = 2f;
-                nma.SetDestination(distraction.transform.position);
-                currState = states.seeking;
-            }
+            nma.stoppingDistance = 2f;
+            nma.SetDestination(distraction.transform.position);
+            currState = states.seeking;
         }
     }
 
@@ -109,7 +108,7 @@ public class distractiontesting : MonoBehaviour
             return;
         }
 
-        //nma.stoppingDistance = 1f; // added by me
+        nma.stoppingDistance = 0f; // added by me
         nma.SetDestination(RandomNavSphere(transform.position, 10.0f, floormask));
         currState = states.wandering;
 
@@ -138,7 +137,7 @@ public class distractiontesting : MonoBehaviour
 
     // Innocent Qwa's Code section above ^
 
-    
+
 
     private void doSeeking()
     {
