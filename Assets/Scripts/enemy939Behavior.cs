@@ -24,7 +24,7 @@ public class enemy939Behavior : MonoBehaviour
     Rigidbody rb;
     NavMeshAgent nma;
 
-    public enum states
+    enum states
     {
         idle,
         wandering,
@@ -33,11 +33,11 @@ public class enemy939Behavior : MonoBehaviour
         chasing
     }
 
-    public states currState = states.idle;
+    states currState = states.idle;
 
     // Timer vars
     private float waitTimer = 0.0f;
-    //private float distractedTimer = 5f;
+    private float distractedTimer;
 
 
     // Start is called before the first frame update
@@ -52,7 +52,7 @@ public class enemy939Behavior : MonoBehaviour
     }
 
     // Update function
-    void Update()
+    private void Update()
     {
         switch (currState)
         {
@@ -65,8 +65,11 @@ public class enemy939Behavior : MonoBehaviour
             case states.seeking:
                 doSeeking();
                 break;
+            case states.distracted:
+                doDistracted();
+                break;
         }
-        //output.text = nma.pathStatus.ToString();
+        output.text = currState.ToString();
     }
 
     private void OnTriggerStay(Collider other)
@@ -76,7 +79,7 @@ public class enemy939Behavior : MonoBehaviour
             nma.SetDestination(player.transform.position);
             currState = states.chasing;
         }
-        else if (other.gameObject == distraction && currState != states.distracted)
+        else if (other.gameObject == distraction)
         {
             nma.stoppingDistance = 2f;
             nma.SetDestination(distraction.transform.position);
@@ -86,7 +89,7 @@ public class enemy939Behavior : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject == player || other.gameObject == distraction)
+        if (other.gameObject == player)
         {
             currState = states.idle;
         }
@@ -94,38 +97,32 @@ public class enemy939Behavior : MonoBehaviour
 
     // Wandering AI written by Innocent Qwa on youtube
     // https://www.youtube.com/watch?v=K2yirE5W2aU
-    #region Wandering AI by Innocent Qwa
+    // Code section below v
 
     private void doIdle()
     {
+
         if (waitTimer > 0)
         {
             waitTimer -= Time.deltaTime;
-            //print(waitTimer.ToString());
             return;
         }
-        else
-        {
-            nma.stoppingDistance = 0f; // added by me
-            nma.SetDestination(RandomNavSphere(transform.position, 10.0f, floormask));
 
-            print("destination " + nma.destination.ToString());
+        nma.stoppingDistance = 0f; // added by me
+        nma.SetDestination(RandomNavSphere(transform.position, 10.0f, floormask));
+        currState = states.wandering;
 
-            currState = states.wandering;
-        }
     }
 
     private void doWander()
     {
-        if (nma.pathStatus == NavMeshPathStatus.PathComplete)
+        if (nma.pathStatus != NavMeshPathStatus.PathComplete)
         {
-            waitTimer = UnityEngine.Random.Range(3.0f, 4.0f);
-
-            print(currState.ToString());
-
-            currState = states.idle;
-            
+            return;
         }
+
+        waitTimer = UnityEngine.Random.Range(1.0f, 4.0f);
+        currState = states.idle;
     }
 
     Vector3 RandomNavSphere(Vector3 origin, float distance, LayerMask layerMask)
@@ -138,15 +135,29 @@ public class enemy939Behavior : MonoBehaviour
         return navHit.position;
     }
 
-    #endregion
+    // Innocent Qwa's Code section above ^
+
 
 
     private void doSeeking()
     {
-        if (nma.pathStatus == NavMeshPathStatus.PathComplete)
+        if (nma.pathStatus != NavMeshPathStatus.PathComplete)
         {
-            //distractedTimer = 30f;
-            currState = states.distracted;
+            return;
         }
+
+        distractedTimer = 30f;
+        currState = states.idle;
+    }
+
+    private void doDistracted()
+    {
+        if (distractedTimer > 0)
+        {
+            distractedTimer -= Time.deltaTime;
+            return;
+        }
+
+        currState = states.idle;
     }
 }

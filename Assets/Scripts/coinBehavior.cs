@@ -4,33 +4,36 @@ using UnityEngine;
 
 public class coinBehavior : MonoBehaviour
 {
+    public GameObject coin;
     public bool isGrounded;
-
-    private Rigidbody rb;
     
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        //isGrounded = nearGround();
+        
     }
 
-    public bool nearGround()
+    public void CheckGround()
     {
-        if (Mathf.Abs(rb.velocity.y) > 1f)
+        Vector3 origin = new Vector3(coin.transform.position.x, coin.transform.position.y - (coin.transform.localScale.y * .5f), coin.transform.position.z);
+        Vector3 direction = coin.transform.TransformDirection(Vector3.down);
+        float distance = .75f;
+
+        if (Physics.Raycast(origin, direction, out RaycastHit hit, distance))
         {
-            return false;
+            Debug.DrawRay(origin, direction * distance, Color.red);
+            isGrounded = true;
         }
-        if (rb.transform.position.y > 0.6f)
+        else
         {
-            return false;
+            isGrounded = false;
         }
-        return true;
     }
 
 }
