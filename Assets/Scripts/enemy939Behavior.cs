@@ -24,7 +24,7 @@ public class enemy939Behavior : MonoBehaviour
     Rigidbody rb;
     NavMeshAgent nma;
 
-    enum states
+    public enum states
     {
         idle,
         wandering,
@@ -33,11 +33,11 @@ public class enemy939Behavior : MonoBehaviour
         chasing
     }
 
-    states currState = states.idle;
+    public states currState = states.idle;
 
     // Timer vars
     private float waitTimer = 0.0f;
-    private float distractedTimer;
+    //private float distractedTimer = 5f;
 
 
     // Start is called before the first frame update
@@ -52,7 +52,7 @@ public class enemy939Behavior : MonoBehaviour
     }
 
     // Update function
-    private void Update()
+    void Update()
     {
         switch (currState)
         {
@@ -65,11 +65,8 @@ public class enemy939Behavior : MonoBehaviour
             case states.seeking:
                 doSeeking();
                 break;
-            case states.distracted:
-                doDistracted();
-                break;
         }
-        output.text = currState.ToString();
+        //output.text = nma.pathStatus.ToString();
     }
 
     private void OnTriggerStay(Collider other)
@@ -79,7 +76,7 @@ public class enemy939Behavior : MonoBehaviour
             nma.SetDestination(player.transform.position);
             currState = states.chasing;
         }
-        else if (other.gameObject == distraction)
+        else if (other.gameObject == distraction && currState != states.distracted)
         {
             nma.stoppingDistance = 2f;
             nma.SetDestination(distraction.transform.position);
@@ -89,7 +86,7 @@ public class enemy939Behavior : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject == player)
+        if (other.gameObject == player || other.gameObject == distraction)
         {
             currState = states.idle;
         }
@@ -97,32 +94,38 @@ public class enemy939Behavior : MonoBehaviour
 
     // Wandering AI written by Innocent Qwa on youtube
     // https://www.youtube.com/watch?v=K2yirE5W2aU
-    // Code section below v
+    #region Wandering AI by Innocent Qwa
 
     private void doIdle()
     {
-
         if (waitTimer > 0)
         {
             waitTimer -= Time.deltaTime;
+            //print(waitTimer.ToString());
             return;
         }
+        else
+        {
+            nma.stoppingDistance = 0f; // added by me
+            nma.SetDestination(RandomNavSphere(transform.position, 10.0f, floormask));
 
-        nma.stoppingDistance = 0f; // added by me
-        nma.SetDestination(RandomNavSphere(transform.position, 10.0f, floormask));
-        currState = states.wandering;
+            print("destination " + nma.destination.ToString());
 
+            currState = states.wandering;
+        }
     }
 
     private void doWander()
     {
-        if (nma.pathStatus != NavMeshPathStatus.PathComplete)
+        if (nma.pathStatus == NavMeshPathStatus.PathComplete)
         {
-            return;
-        }
+            waitTimer = UnityEngine.Random.Range(3.0f, 4.0f);
 
-        waitTimer = UnityEngine.Random.Range(1.0f, 4.0f);
-        currState = states.idle;
+            print(currState.ToString());
+
+            currState = states.idle;
+            
+        }
     }
 
     Vector3 RandomNavSphere(Vector3 origin, float distance, LayerMask layerMask)
@@ -135,29 +138,15 @@ public class enemy939Behavior : MonoBehaviour
         return navHit.position;
     }
 
-    // Innocent Qwa's Code section above ^
-
+    #endregion
 
 
     private void doSeeking()
     {
-        if (nma.pathStatus != NavMeshPathStatus.PathComplete)
+        if (nma.pathStatus == NavMeshPathStatus.PathComplete)
         {
-            return;
+            //distractedTimer = 30f;
+            currState = states.distracted;
         }
-
-        distractedTimer = 30f;
-        currState = states.idle;
-    }
-
-    private void doDistracted()
-    {
-        if (distractedTimer > 0)
-        {
-            distractedTimer -= Time.deltaTime;
-            return;
-        }
-
-        currState = states.idle;
     }
 }
