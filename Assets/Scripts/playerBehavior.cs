@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using UnityEngine.UI;
 
 public class playerBehavior : MonoBehaviour
 {
+    #region Declare Variables
 
     // Player variables
     public GameObject player;
@@ -37,9 +39,13 @@ public class playerBehavior : MonoBehaviour
     public float throwForce;
     public float throwUpwardForce;
 
+    // UI variables
+    public Image rmbRadial;
     public TMP_Text output;
 
+    #endregion
 
+    
 
     // Start is called before the first frame update
     void Start()
@@ -65,14 +71,15 @@ public class playerBehavior : MonoBehaviour
     void FixedUpdate()
     {
         currState = stateTest();
-        if (tossCooldown > 0)
+        if (tossTimer > 0)
         {
-            tossCooldown -= Time.deltaTime;
+            tossTimer -= Time.deltaTime;
         }
         else if (Input.GetKeyDown(KeyCode.Mouse1) && coin.GetComponent<coinBehavior>().nearGround())
         {
             tossCoin();
         }
+        updateRadial();
 
         switch (currState)
         {
@@ -135,6 +142,7 @@ public class playerBehavior : MonoBehaviour
         }
     }
 
+    // Functions based on current state
     #region Behavior Functions
     private void doWalk()
     {
@@ -154,6 +162,16 @@ public class playerBehavior : MonoBehaviour
         }
     }
     #endregion
+
+    // Update cooldown radial UI
+    private void updateRadial()
+    {
+        if (tossCooldown > 0)
+        {
+            float cooldownPercent = tossTimer / tossCooldown;
+            rmbRadial.fillAmount = 1 - cooldownPercent;
+        }
+    }
 
     // Tossing code by Dave / GameDevelopment on Youtube
     // https://www.youtube.com/watch?v=F20Sr5FlUlE
@@ -183,7 +201,9 @@ public class playerBehavior : MonoBehaviour
 
         coinRb.AddForce(forceToAdd, ForceMode.Impulse);
 
-        coinRb.AddTorque(coinRb.transform.up * torqueForce);
+        print(playerCam.transform.forward.ToString());
+        float turn = Input.GetAxis("Horizontal");
+        coinRb.AddTorque(playerCam.transform.forward * torqueForce);
 
     }
 
