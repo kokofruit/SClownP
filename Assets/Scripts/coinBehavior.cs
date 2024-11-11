@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class coinBehavior : MonoBehaviour
 {
-    public bool isGrounded;
-
     private Rigidbody rb;
-    
+
+    public float existTimer = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,22 +15,24 @@ public class coinBehavior : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        //isGrounded = nearGround();
+        if (rb.transform.position.y > -5)
+        {
+            if (existTimer > 0)
+            {
+                existTimer -= Time.deltaTime;
+            }
+            else
+            {
+                //rb.transform.position = new Vector3(0, -10, 0);
+            }
+        }
     }
 
-    public bool nearGround()
+    void resetCoin()
     {
-        if (Mathf.Abs(rb.velocity.y) > 1f)
-        {
-            return false;
-        }
-        if (rb.transform.position.y > 0.6f)
-        {
-            return false;
-        }
-        return true;
+        rb.transform.rotation = new Quaternion(90,0,0,0);
     }
 
 }

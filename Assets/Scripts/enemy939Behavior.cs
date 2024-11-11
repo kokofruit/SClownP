@@ -37,8 +37,6 @@ public class enemy939Behavior : MonoBehaviour
 
     // Timer vars
     private float waitTimer = 0.0f;
-    //private float distractedTimer = 5f;
-
 
     // Start is called before the first frame update
     void Start()
@@ -101,15 +99,12 @@ public class enemy939Behavior : MonoBehaviour
         if (waitTimer > 0)
         {
             waitTimer -= Time.deltaTime;
-            //print(waitTimer.ToString());
             return;
         }
         else
         {
             nma.stoppingDistance = 0f; // added by me
             nma.SetDestination(RandomNavSphere(transform.position, 10.0f, floormask));
-
-            print("destination " + nma.destination.ToString());
 
             currState = states.wandering;
         }
@@ -120,8 +115,6 @@ public class enemy939Behavior : MonoBehaviour
         if (nma.pathStatus == NavMeshPathStatus.PathComplete)
         {
             waitTimer = UnityEngine.Random.Range(3.0f, 4.0f);
-
-            print(currState.ToString());
 
             currState = states.idle;
             

@@ -27,6 +27,7 @@ public class playerBehavior : MonoBehaviour
     // Coin variables
     public GameObject coin;
     private Rigidbody coinRb;
+    private coinBehavior coinScript;
 
     // Enemy variables
     public GameObject enemy;
@@ -34,7 +35,7 @@ public class playerBehavior : MonoBehaviour
 
     // Toss variables
     public float tossCooldown;
-    private float tossTimer = 0f;
+    public float tossTimer = 0f;
     public float torqueForce;
     public float throwForce;
     public float throwUpwardForce;
@@ -44,8 +45,6 @@ public class playerBehavior : MonoBehaviour
     public TMP_Text output;
 
     #endregion
-
-    
 
     // Start is called before the first frame update
     void Start()
@@ -60,6 +59,7 @@ public class playerBehavior : MonoBehaviour
 
         // Coin variables
         coinRb = coin.GetComponent<Rigidbody>();
+        coinScript = coin.GetComponent<coinBehavior>();
 
         // Enemy variables
         enemyScript = enemy.GetComponent<enemy939Behavior>();
@@ -68,14 +68,14 @@ public class playerBehavior : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         currState = stateTest();
-        if (tossTimer > 0)
+        if (tossTimer >= 0)
         {
             tossTimer -= Time.deltaTime;
         }
-        else if (Input.GetKeyDown(KeyCode.Mouse1) && coin.GetComponent<coinBehavior>().nearGround())
+        else if (Input.GetKeyDown(KeyCode.Mouse1)/* && coin.GetComponent<coinBehavior>().nearGround()*/)
         {
             tossCoin();
         }
@@ -96,8 +96,10 @@ public class playerBehavior : MonoBehaviour
                 break;
         }
 
-        output.text = currState.ToString();
+        //output.text = currState.ToString();
     }
+
+    #region Behavior
 
     // Set current state based on FPC script
     private states stateTest()
@@ -142,8 +144,6 @@ public class playerBehavior : MonoBehaviour
         }
     }
 
-    // Functions based on current state
-    #region Behavior Functions
     private void doWalk()
     {
         playerRad.radius = 8f;
@@ -161,6 +161,7 @@ public class playerBehavior : MonoBehaviour
             playerRad.radius = 4f;
         }
     }
+
     #endregion
 
     // Update cooldown radial UI
@@ -179,16 +180,17 @@ public class playerBehavior : MonoBehaviour
 
     void tossCoin()
     {
+        // update timers
         tossTimer = tossCooldown;
+        coinScript.existTimer = tossCooldown;
 
         // set spawnpoint for coin  - by me
         Vector3 spawnPoint = player.transform.position + playerCam.transform.forward * 1.2f;
         coin.transform.position = spawnPoint;
-
+        
 
         // calculate direction
         Vector3 forceDirection = playerCam.transform.forward;
-
         RaycastHit hit;
 
         if (Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, 500f))
@@ -198,12 +200,12 @@ public class playerBehavior : MonoBehaviour
 
         // add force
         Vector3 forceToAdd = forceDirection * throwForce + transform.up * throwUpwardForce;
-
         coinRb.AddForce(forceToAdd, ForceMode.Impulse);
 
-        print(playerCam.transform.forward.ToString());
-        float turn = Input.GetAxis("Horizontal");
-        coinRb.AddTorque(playerCam.transform.forward * torqueForce);
+
+        // set horizontal and then add torque to flip - by me
+        coin.transform.eulerAngles = new Vector3(90,0,0);
+        coinRb.AddTorque(transform.right * torqueForce);
 
     }
 
