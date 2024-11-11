@@ -52,7 +52,7 @@ public class enemy939Behavior : MonoBehaviour
     }
 
     // Update function
-    void Update()
+    void FixedUpdate()
     {
         switch (currState)
         {
