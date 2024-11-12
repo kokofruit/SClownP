@@ -5,16 +5,17 @@ using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
-public class distractiontesting : MonoBehaviour
+
+public class enemy939Behavior : MonoBehaviour
 {
     // Public vars
     public float moveSpeed;
     public LayerMask floormask;
 
     public GameObject distraction;
+    
     public GameObject player;
 
     public TMPro.TMP_Text output;
@@ -23,7 +24,7 @@ public class distractiontesting : MonoBehaviour
     Rigidbody rb;
     NavMeshAgent nma;
 
-    enum states
+    public enum states
     {
         idle,
         wandering,
@@ -31,13 +32,11 @@ public class distractiontesting : MonoBehaviour
         distracted,
         chasing
     }
-    
-    states currState = states.idle;
+
+    public states currState = states.idle;
 
     // Timer vars
     private float waitTimer = 0.0f;
-    private float distractedTimer;
-
 
     // Start is called before the first frame update
     void Start()
@@ -46,12 +45,13 @@ public class distractiontesting : MonoBehaviour
         nma = GetComponent<NavMeshAgent>();
 
         nma.speed = moveSpeed;
+
+        
     }
 
     // Update function
-    private void Update()
+    void FixedUpdate()
     {
-        testDistractionProx();   
         switch (currState)
         {
             case states.idle:
@@ -63,76 +63,62 @@ public class distractiontesting : MonoBehaviour
             case states.seeking:
                 doSeeking();
                 break;
-            case states.distracted:
-                doDistracted();
-                break;
         }
-
+        //output.text = nma.pathStatus.ToString();
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.name == "coin")
+        if (other.gameObject == player)
         {
-            output.text = "yes";
+            nma.SetDestination(player.transform.position);
+            currState = states.chasing;
+        }
+        else if (other.gameObject == distraction && currState != states.distracted)
+        {
+            nma.stoppingDistance = 2f;
+            nma.SetDestination(distraction.transform.position);
+            currState = states.seeking;
         }
     }
 
-    // See if player is near
-    private void testPlayerProx()
+    private void OnTriggerExit(Collider other)
     {
-        if (currState != states.chasing)
+        if (other.gameObject == player || other.gameObject == distraction)
         {
-            if (Vector3.Distance(transform.position, player.transform.position) < 5f)
-            {
-                nma.SetDestination(player.transform.position);
-                currState = states.chasing;
-            }
-        }
-    }
-
-    // See if distraction is near
-    private void testDistractionProx()
-    {
-        if (currState == states.idle || currState == states.wandering)
-        {
-            if (Vector3.Distance(transform.position, distraction.transform.position) < 5f)
-            {
-                nma.stoppingDistance = 2f;
-                nma.SetDestination(distraction.transform.position);
-                currState = states.seeking;
-            }
+            currState = states.idle;
         }
     }
 
     // Wandering AI written by Innocent Qwa on youtube
     // https://www.youtube.com/watch?v=K2yirE5W2aU
-    // Code section below v
+    #region Wandering AI by Innocent Qwa
 
     private void doIdle()
     {
-
         if (waitTimer > 0)
         {
             waitTimer -= Time.deltaTime;
             return;
         }
+        else
+        {
+            nma.stoppingDistance = 0f; // added by me
+            nma.SetDestination(RandomNavSphere(transform.position, 10.0f, floormask));
 
-        //nma.stoppingDistance = 1f; // added by me
-        nma.SetDestination(RandomNavSphere(transform.position, 10.0f, floormask));
-        currState = states.wandering;
-
+            currState = states.wandering;
+        }
     }
 
     private void doWander()
     {
-        if (nma.pathStatus != NavMeshPathStatus.PathComplete)
+        if (nma.pathStatus == NavMeshPathStatus.PathComplete)
         {
-            return;
-        }
+            waitTimer = UnityEngine.Random.Range(3.0f, 4.0f);
 
-        waitTimer = UnityEngine.Random.Range(1.0f, 4.0f);
-        currState = states.idle;
+            currState = states.idle;
+            
+        }
     }
 
     Vector3 RandomNavSphere(Vector3 origin, float distance, LayerMask layerMask)
@@ -145,29 +131,15 @@ public class distractiontesting : MonoBehaviour
         return navHit.position;
     }
 
-    // Innocent Qwa's Code section above ^
+    #endregion
 
-    
 
     private void doSeeking()
     {
-        if (nma.pathStatus != NavMeshPathStatus.PathComplete)
+        if (nma.pathStatus == NavMeshPathStatus.PathComplete)
         {
-            return;
+            //distractedTimer = 30f;
+            currState = states.distracted;
         }
-
-        distractedTimer = 30f;
-        currState = states.idle;
-    }
-
-    private void doDistracted()
-    {
-        if (distractedTimer > 0)
-        {
-            distractedTimer -= Time.deltaTime;
-            return;
-        }
-
-        currState = states.idle;
     }
 }
