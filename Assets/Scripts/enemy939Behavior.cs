@@ -63,18 +63,20 @@ public class enemy939Behavior : MonoBehaviour
             case states.seeking:
                 doSeeking();
                 break;
+            case states.chasing:
+                doChasing();
+                break;
         }
-        //output.text = nma.pathStatus.ToString();
+        output.text = currState.ToString();
     }
 
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject == player)
         {
-            nma.SetDestination(player.transform.position);
             currState = states.chasing;
         }
-        else if (other.gameObject == distraction && currState != states.distracted)
+        else if (other.gameObject == distraction && currState != states.distracted && currState != states.chasing)
         {
             nma.stoppingDistance = 2f;
             nma.SetDestination(distraction.transform.position);
@@ -141,5 +143,10 @@ public class enemy939Behavior : MonoBehaviour
             //distractedTimer = 30f;
             currState = states.distracted;
         }
+    }
+
+    private void doChasing()
+    {
+        nma.SetDestination(player.transform.position);
     }
 }
