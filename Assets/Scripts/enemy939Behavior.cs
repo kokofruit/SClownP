@@ -175,7 +175,7 @@ public class enemy939Behavior : MonoBehaviour
     {
         Quaternion target = Quaternion.LookRotation(coin.transform.position);
         var rotation = Quaternion.RotateTowards(transform.rotation, target, turnSpeed);
-        Quaternion
+        transform.rotation = rotation;
     }
 
     void doChasing()

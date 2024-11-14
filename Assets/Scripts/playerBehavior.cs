@@ -38,6 +38,9 @@ public class playerBehavior : MonoBehaviour
     float throwForce = 5f;
     float throwUpwardForce = 8f;
 
+    // Key variables
+    public bool hasKey = false;
+
     // UI variables
     public Image rmbRadial;
     public TMP_Text output;
@@ -175,7 +178,8 @@ public class playerBehavior : MonoBehaviour
 
     void takeKeyCard(GameObject obj)
     {
-        Destroy(obj);
+        obj.SetActive(false);
+        hasKey = true;
     }
 
     void openDoor(GameObject obj)
