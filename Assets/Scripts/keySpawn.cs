@@ -9,11 +9,11 @@ public class keySpawn : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        coordDict.Add("first", new int[1,2] {{1,2}});
+        //coordDict.Add("first", new int[1,2] {{1,2}});
 
-        foreach (string key in coordDict.Keys)
-        {
-            print(coordDict[key].ToString());
-        }
+        //foreach (string key in coordDict.Keys)
+        //{
+        //    print(coordDict[key].ToString());
+        //}
     }
 }

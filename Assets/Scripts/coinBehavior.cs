@@ -5,16 +5,17 @@ using UnityEngine;
 public class coinBehavior : MonoBehaviour
 {
     private Rigidbody rb;
+    SphereCollider coinRad;
 
     public float existTimer = 0;
 
-    // Start is called before the first frame update
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        coinRad = GetComponent<SphereCollider>();
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         if (rb.transform.position.y > -5)
@@ -30,9 +31,13 @@ public class coinBehavior : MonoBehaviour
         }
     }
 
-    void resetCoin()
+    private void OnCollisionEnter(Collision collision)
     {
-        rb.transform.rotation = new Quaternion(90,0,0,0);
-    }
+        if (collision.gameObject.name == "surface")
+        {
 
+            //int amount = collision.contactCount;
+            coinRad.radius = 8f;
+        }
+    }
 }
