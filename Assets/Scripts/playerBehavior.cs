@@ -178,7 +178,7 @@ public class playerBehavior : MonoBehaviour
 
     void takeKeyCard(GameObject obj)
     {
-        obj.SetActive(false);
+        Destroy(obj);
         hasKey = true;
     }
 
