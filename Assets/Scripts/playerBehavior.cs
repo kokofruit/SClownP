@@ -165,6 +165,7 @@ public class playerBehavior : MonoBehaviour
         if (Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, 2.75f))
         {
             GameObject obj = hit.transform.gameObject;
+            
             if (obj.name == "keycard")
             {
                 takeKeyCard(obj);
@@ -178,7 +179,8 @@ public class playerBehavior : MonoBehaviour
 
     void takeKeyCard(GameObject obj)
     {
-        Destroy(obj);
+        //Destroy(obj);
+        obj.SetActive(false);
         hasKey = true;
     }
 

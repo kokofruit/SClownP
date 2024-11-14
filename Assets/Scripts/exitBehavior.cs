@@ -17,7 +17,8 @@ public class exitBehavior : MonoBehaviour
         player = playerScript.gameObject;
         playerBody = player.GetComponent<CapsuleCollider>();
 
-        winScreen.gameObject.SetActive(false);
+        //winScreen.gameObject.SetActive(false);
+        winScreen.alpha = 0;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -30,8 +31,10 @@ public class exitBehavior : MonoBehaviour
 
     void winGame()
     {
-        hud.gameObject.SetActive(false);
-        winScreen.gameObject.SetActive(true);
+        //hud.gameObject.SetActive(false);
+        hud.alpha = 0;
+        //winScreen.gameObject.SetActive(true);
+        winScreen.alpha = 1;
         Time.timeScale = 0;
     }
 }

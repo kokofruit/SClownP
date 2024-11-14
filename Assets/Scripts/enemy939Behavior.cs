@@ -32,11 +32,12 @@ public class enemy939Behavior : MonoBehaviour
     float waitTimer = 0.0f;
 
     // Player vars
-    GameObject player;
+    public GameObject player;
     playerBehavior playerScript;
+    CapsuleCollider playerCap;
 
     // Coin vars
-    GameObject coin;
+    public GameObject coin;
 
     // Output vars
     public TMPro.TMP_Text output;
@@ -54,6 +55,7 @@ public class enemy939Behavior : MonoBehaviour
         // Player vars
         playerScript = FindObjectOfType<playerBehavior>();
         player = playerScript.gameObject;
+        playerCap = player.GetComponent<CapsuleCollider>();
 
         // Coin vars
         coin = FindObjectOfType<coinBehavior>().gameObject;
@@ -83,7 +85,7 @@ public class enemy939Behavior : MonoBehaviour
                 doDistracted();
                 break;
         }
-        output.text = currState.ToString();
+        //output.text = currState.ToString();
     }
 
     #region Object detection
@@ -185,4 +187,13 @@ public class enemy939Behavior : MonoBehaviour
     }
 
     #endregion
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider == playerCap)
+        {
+            print("hit!");
+        }
+    }
+
 }
