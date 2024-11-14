@@ -10,20 +10,12 @@ using UnityEngine.UI;
 
 public class enemy939Behavior : MonoBehaviour
 {
-    // Public vars
-    public float moveSpeed;
-    public LayerMask floormask;
-
-    public GameObject distraction;
-    
-    public GameObject player;
-
-    public TMPro.TMP_Text output;
+    #region Declare variables
 
     // Enemy vars
+    public float moveSpeed;
     Rigidbody rb;
     NavMeshAgent nma;
-
     public enum states
     {
         idle,
@@ -32,25 +24,48 @@ public class enemy939Behavior : MonoBehaviour
         distracted,
         chasing
     }
-
     public states currState = states.idle;
+    public float turnSpeed;
 
-    // Timer vars
-    private float waitTimer = 0.0f;
+    // Navigation vars
+    public LayerMask floormask;
+    float waitTimer = 0.0f;
 
-    // Start is called before the first frame update
+    // Player vars
+    public GameObject player;
+    playerBehavior playerScript;
+    CapsuleCollider playerCap;
+
+    // Coin vars
+    public GameObject coin;
+
+    // Output vars
+    public TMPro.TMP_Text output;
+
+    #endregion
+
     void Start()
     {
+        #region Get Variables
+
+        // Enemy vars
         rb = GetComponent<Rigidbody>();
         nma = GetComponent<NavMeshAgent>();
 
-        nma.speed = moveSpeed;
+        // Player vars
+        playerScript = FindObjectOfType<playerBehavior>();
+        player = playerScript.gameObject;
+        playerCap = player.GetComponent<CapsuleCollider>();
 
+        // Coin vars
+        coin = FindObjectOfType<coinBehavior>().gameObject;
         
+        #endregion
+
+        nma.speed = moveSpeed;
     }
 
-    // Update function
-    void FixedUpdate()
+    void Update()
     {
         switch (currState)
         {
@@ -63,38 +78,51 @@ public class enemy939Behavior : MonoBehaviour
             case states.seeking:
                 doSeeking();
                 break;
+            case states.chasing:
+                doChasing();
+                break;
+            case states.distracted:
+                doDistracted();
+                break;
         }
-        //output.text = nma.pathStatus.ToString();
+        //output.text = currState.ToString();
     }
 
-    private void OnTriggerStay(Collider other)
+    #region Object detection
+    void OnTriggerStay(Collider other)
     {
         if (other.gameObject == player)
         {
-            nma.SetDestination(player.transform.position);
             currState = states.chasing;
+            playerScript.currState = playerBehavior.states.locked;
         }
-        else if (other.gameObject == distraction && currState != states.distracted)
+        else if (other.gameObject == coin && currState != states.chasing)
         {
-            nma.stoppingDistance = 2f;
-            nma.SetDestination(distraction.transform.position);
             currState = states.seeking;
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    void OnTriggerExit(Collider other)
     {
-        if (other.gameObject == player || other.gameObject == distraction)
+        if (other.gameObject == player)
+        {
+            currState = states.idle;
+            playerScript.currState = playerBehavior.states.idle;
+        }
+        if (other.gameObject == coin && currState != states.chasing)
         {
             currState = states.idle;
         }
     }
+    #endregion
+
+    #region Behavior
 
     // Wandering AI written by Innocent Qwa on youtube
     // https://www.youtube.com/watch?v=K2yirE5W2aU
     #region Wandering AI by Innocent Qwa
 
-    private void doIdle()
+    void doIdle()
     {
         if (waitTimer > 0)
         {
@@ -110,7 +138,7 @@ public class enemy939Behavior : MonoBehaviour
         }
     }
 
-    private void doWander()
+    void doWander()
     {
         if (nma.pathStatus == NavMeshPathStatus.PathComplete)
         {
@@ -134,12 +162,38 @@ public class enemy939Behavior : MonoBehaviour
     #endregion
 
 
-    private void doSeeking()
+    void doSeeking()
     {
+        nma.SetDestination(coin.transform.position);
+        nma.stoppingDistance = 2f;
+        
         if (nma.pathStatus == NavMeshPathStatus.PathComplete)
         {
-            //distractedTimer = 30f;
             currState = states.distracted;
         }
     }
+
+    void doDistracted()
+    {
+        Quaternion target = Quaternion.LookRotation(coin.transform.position);
+        var rotation = Quaternion.RotateTowards(transform.rotation, target, turnSpeed);
+        transform.rotation = rotation;
+    }
+
+    void doChasing()
+    {
+        nma.SetDestination(player.transform.position);
+        nma.stoppingDistance = 0f;
+    }
+
+    #endregion
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider == playerCap)
+        {
+            print("hit!");
+        }
+    }
+
 }

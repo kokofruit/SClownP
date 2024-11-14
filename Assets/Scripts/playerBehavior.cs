@@ -12,33 +12,34 @@ public class playerBehavior : MonoBehaviour
 
     // Player variables
     public GameObject player;
-    private Rigidbody playerRb;
-    private SphereCollider playerRad;
-    private Camera playerCam;
     public enum states
     {
         idle,
         walking,
         sprinting,
-        crouching
+        crouching,
+        locked
     }
     public states currState;
+    Rigidbody playerRb;
+    SphereCollider playerRad;
+    Camera playerCam;
 
     // Coin variables
-    public GameObject coin;
-    private Rigidbody coinRb;
-    private coinBehavior coinScript;
-
-    // Enemy variables
-    public GameObject enemy;
-    private enemy939Behavior enemyScript;
+    GameObject coin;
+    Rigidbody coinRb;
+    coinBehavior coinScript;
+    SphereCollider coinRad;
 
     // Toss variables
     public float tossCooldown;
-    public float tossTimer = 0f;
-    public float torqueForce;
-    public float throwForce;
-    public float throwUpwardForce;
+    float tossTimer = 0f;
+    float torqueForce = 18f;
+    float throwForce = 5f;
+    float throwUpwardForce = 8f;
+
+    // Key variables
+    public bool hasKey = false;
 
     // UI variables
     public Image rmbRadial;
@@ -46,11 +47,10 @@ public class playerBehavior : MonoBehaviour
 
     #endregion
 
-    // Start is called before the first frame update
     void Start()
     {
         #region Get Variables
-
+        
         // Player variables
         playerRb = GetComponent<Rigidbody>();
         playerRad = player.GetComponent<SphereCollider>();
@@ -58,29 +58,34 @@ public class playerBehavior : MonoBehaviour
         currState = states.idle;
 
         // Coin variables
+        coinScript = FindObjectOfType<coinBehavior>();
+        coin = coinScript.gameObject;
         coinRb = coin.GetComponent<Rigidbody>();
-        coinScript = coin.GetComponent<coinBehavior>();
-
-        // Enemy variables
-        enemyScript = enemy.GetComponent<enemy939Behavior>();
+        coinRad = coin.GetComponent<SphereCollider>();
 
         #endregion
     }
 
-    // Update is called once per frame
     void Update()
     {
-        currState = stateTest();
+        // Update cooldown or throw coin
         if (tossTimer >= 0)
         {
             tossTimer -= Time.deltaTime;
         }
-        else if (Input.GetKeyDown(KeyCode.Mouse1)/* && coin.GetComponent<coinBehavior>().nearGround()*/)
+        else if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             tossCoin();
         }
         updateRadial();
 
+        // Update state
+        if (currState != states.locked)
+        {
+            currState = stateTest();
+        }
+
+        // Follow state behavior
         switch (currState)
         {
             case states.idle:
@@ -94,37 +99,23 @@ public class playerBehavior : MonoBehaviour
             case states.crouching:
                 doCrouch();
                 break;
+            case states.locked:
+                break;
         }
 
-        //output.text = currState.ToString();
+        // Interact ability
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            interact();
+        }
     }
 
     #region Behavior
 
     // Set current state based on FPC script
-    private states stateTest()
+    states stateTest()
     {
-        //bool isHorizontally = !Mathf.Approximately(playerRb.velocity.x, 0);
-        //bool isVertically = !Mathf.Approximately(playerRb.velocity.z, 0);
-
-        //if (Input.GetKey(KeyCode.LeftShift))
-        //{
-        //    return states.sprinting;
-        //}
-        //else if (Input.GetKey(KeyCode.LeftControl))
-        //{
-        //    return states.crouching;
-        //}
-        //else if (isHorizontally || isVertically)
-        //{
-        //    return states.walking;
-        //}
-        //else
-        //{
-        //    return states.idle;
-        //}
         FirstPersonController fpcScript = player.GetComponent<FirstPersonController>();
-
         
         if (fpcScript.isSprinting)
         {
@@ -144,35 +135,63 @@ public class playerBehavior : MonoBehaviour
         }
     }
 
-    private void doWalk()
+    void doWalk()
     {
         playerRad.radius = 8f;
     }
 
-    private void doSprint()
+    void doSprint()
     {
         playerRad.radius = 10f;
     }
 
-    private void doCrouch()
+    void doCrouch()
     {
-        if (enemyScript.currState != enemy939Behavior.states.chasing)
-        {
-            playerRad.radius = 4f;
-        }
+        playerRad.radius = 4f;
+    }
+
+    void doLocked()
+    {
+        playerRad.radius = 10f;
     }
 
     #endregion
 
-    // Update cooldown radial UI
-    private void updateRadial()
+    #region Interaction Ability
+
+    void interact()
     {
-        if (tossCooldown > 0)
+        RaycastHit hit;
+        if (Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, 2.75f))
         {
-            float cooldownPercent = tossTimer / tossCooldown;
-            rmbRadial.fillAmount = 1 - cooldownPercent;
+            GameObject obj = hit.transform.gameObject;
+            
+            if (obj.name == "keycard")
+            {
+                takeKeyCard(obj);
+            }
+            if (obj.tag == "door")
+            {
+                openDoor(obj);
+            }
         }
     }
+
+    void takeKeyCard(GameObject obj)
+    {
+        //Destroy(obj);
+        obj.SetActive(false);
+        hasKey = true;
+    }
+
+    void openDoor(GameObject obj)
+    {
+        print("Image the door opened");
+    }
+
+    #endregion
+
+    #region Distraction Ability
 
     // Tossing code by Dave / GameDevelopment on Youtube
     // https://www.youtube.com/watch?v=F20Sr5FlUlE
@@ -180,6 +199,7 @@ public class playerBehavior : MonoBehaviour
 
     void tossCoin()
     {
+
         // update timers
         tossTimer = tossCooldown;
         coinScript.existTimer = tossCooldown;
@@ -187,7 +207,6 @@ public class playerBehavior : MonoBehaviour
         // set spawnpoint for coin  - by me
         Vector3 spawnPoint = player.transform.position + playerCam.transform.forward * 1.2f;
         coin.transform.position = spawnPoint;
-        
 
         // calculate direction
         Vector3 forceDirection = playerCam.transform.forward;
@@ -207,8 +226,22 @@ public class playerBehavior : MonoBehaviour
         coin.transform.eulerAngles = new Vector3(90,0,0);
         coinRb.AddTorque(transform.right * torqueForce);
 
+        // set coin detection radius
+        coinRad.radius = 0.5f;
+
     }
 
     #endregion
 
+    // Update cooldown radial UI
+    void updateRadial()
+    {
+        if (tossCooldown > 0)
+        {
+            float cooldownPercent = tossTimer / tossCooldown;
+            rmbRadial.fillAmount = 1 - cooldownPercent;
+        }
+    }
+
+    #endregion
 }
