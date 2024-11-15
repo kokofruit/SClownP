@@ -165,7 +165,7 @@ public class playerBehavior : MonoBehaviour
         if (Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, 2.75f))
         {
             GameObject obj = hit.transform.gameObject;
-            
+            print(obj.tag);
             if (obj.name == "keycard")
             {
                 takeKeyCard(obj);
