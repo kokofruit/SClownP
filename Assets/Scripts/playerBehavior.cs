@@ -165,14 +165,20 @@ public class playerBehavior : MonoBehaviour
         if (Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, 2.75f))
         {
             GameObject obj = hit.transform.gameObject;
-            
+            print(obj.name);
             if (obj.name == "keycard")
             {
                 takeKeyCard(obj);
             }
             if (obj.tag == "door")
             {
-                openDoor(obj);
+                doorBehavior doorScript = obj.GetComponent<doorBehavior>();
+                doorScript.doorOpen();
+            }
+            if (obj.tag == "gate")
+            {
+                gateBehavior gateScript = obj.GetComponent<gateBehavior>();
+                gateScript.gateOpen();
             }
         }
     }
