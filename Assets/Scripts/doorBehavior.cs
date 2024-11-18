@@ -26,6 +26,10 @@ public class doorBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        print("x");
+        print(GetComponent<Renderer>().bounds.size.x);
+        print("y");
+        print(GetComponent<Renderer>().bounds.size.y);
         if (isMoving)
         {
             openingAction();

@@ -174,6 +174,11 @@ public class playerBehavior : MonoBehaviour
                 doorBehavior doorScript = obj.GetComponent<doorBehavior>();
                 doorScript.doorOpen();
             }
+            if (obj.tag == "gate")
+            {
+                gateBehavior gateScript = obj.GetComponent<gateBehavior>();
+                gateScript.gateOpen();
+            }
         }
     }
 
