@@ -250,4 +250,24 @@ public class playerBehavior : MonoBehaviour
     }
 
     #endregion
+
+    #region Lose Game
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "enemy")
+        {
+            print("hit!");
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "enemy")
+        {
+            print("hit real!");
+        }
+    }
+
+    #endregion
 }
