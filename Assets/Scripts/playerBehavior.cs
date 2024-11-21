@@ -170,15 +170,24 @@ public class playerBehavior : MonoBehaviour
             {
                 takeKeyCard(obj);
             }
-            if (obj.tag == "door")
+            if (obj.tag == "rDoor")
             {
                 doorBehavior doorScript = obj.GetComponent<doorBehavior>();
                 doorScript.doorOpen();
             }
-            if (obj.tag == "gate")
+            if (obj.tag == "uGate" || obj.tag == "eDoor")
             {
                 gateBehavior gateScript = obj.GetComponent<gateBehavior>();
                 gateScript.gateOpen();
+            }
+            if (obj.tag == "sCabinet")
+            {
+                if (obj.transform.parent != null)
+                {
+                    obj = obj.transform.parent.gameObject;
+                }
+                cabinetBehavior cabScript = obj.GetComponent<cabinetBehavior>();
+                cabScript.search();
             }
         }
     }

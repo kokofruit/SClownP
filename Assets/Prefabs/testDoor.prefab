@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8900362342897668823}
   m_Layer: 0
   m_Name: Door (1)
-  m_TagString: door
+  m_TagString: rDoor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -122,7 +122,7 @@ GameObject:
   - component: {fileID: 5247006700823202131}
   m_Layer: 0
   m_Name: Sphere (1)
-  m_TagString: door
+  m_TagString: rDoor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -205,7 +205,7 @@ GameObject:
   - component: {fileID: 1880641433008148915}
   m_Layer: 0
   m_Name: Sphere (2)
-  m_TagString: door
+  m_TagString: rDoor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -288,7 +288,7 @@ GameObject:
   - component: {fileID: 5266286360260348167}
   m_Layer: 0
   m_Name: Sphere
-  m_TagString: door
+  m_TagString: rDoor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -371,7 +371,7 @@ GameObject:
   - component: {fileID: 7906521758663123375}
   m_Layer: 0
   m_Name: Sphere (3)
-  m_TagString: door
+  m_TagString: rDoor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -454,7 +454,7 @@ GameObject:
   - component: {fileID: 7268718982081432186}
   m_Layer: 0
   m_Name: testDoor
-  m_TagString: door
+  m_TagString: rDoor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

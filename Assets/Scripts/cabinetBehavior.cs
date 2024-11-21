@@ -4,19 +4,17 @@ using UnityEngine;
 
 public class cabinetBehavior : MonoBehaviour
 {
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        foreach(Transform child in transform)
-        {
-            child.position = Vector3.zero;
-        }
-    }
+    bool isSearched = false;
 
-    // Update is called once per frame
-    void Update()
+    public void search()
     {
-        
+        if (!isSearched)
+        {
+            foreach (Transform child in transform)
+            {
+                child.position = child.position - (transform.forward * 0.4f);
+            }
+            isSearched = true;
+        }
     }
 }
