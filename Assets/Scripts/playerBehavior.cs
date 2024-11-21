@@ -250,4 +250,21 @@ public class playerBehavior : MonoBehaviour
     }
 
     #endregion
+
+    #region Lose Game
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "enemy")
+        {
+            loseGame();
+        }
+    }
+
+    private void loseGame()
+    {
+
+    }
+
+    #endregion
 }

@@ -188,12 +188,4 @@ public class enemy939Behavior : MonoBehaviour
 
     #endregion
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider == playerCap)
-        {
-            print("hit!");
-        }
-    }
-
 }
