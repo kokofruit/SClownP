@@ -40,6 +40,7 @@ public class playerBehavior : MonoBehaviour
 
     // Key variables
     public bool hasKey = false;
+    public keyBehavior keyMng;
 
     // UI variables
     public Image rmbRadial;
@@ -62,6 +63,9 @@ public class playerBehavior : MonoBehaviour
         coin = coinScript.gameObject;
         coinRb = coin.GetComponent<Rigidbody>();
         coinRad = coin.GetComponent<SphereCollider>();
+        
+        // Key variables
+        keyMng = GameObject.Find("/-- SETUP --/Key Manager").GetComponent<keyBehavior>();
 
         #endregion
     }
@@ -165,29 +169,36 @@ public class playerBehavior : MonoBehaviour
         if (Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, 2.75f))
         {
             GameObject obj = hit.transform.gameObject;
-            print(obj.name);
-            if (obj.name == "keycard")
+            
+            switch (obj.tag)
             {
-                takeKeyCard(obj);
-            }
-            if (obj.tag == "rDoor")
-            {
-                doorBehavior doorScript = obj.GetComponent<doorBehavior>();
-                doorScript.doorOpen();
-            }
-            if (obj.tag == "uGate" || obj.tag == "eDoor")
-            {
-                gateBehavior gateScript = obj.GetComponent<gateBehavior>();
-                gateScript.gateOpen();
-            }
-            if (obj.tag == "sCabinet")
-            {
-                if (obj.transform.parent != null)
-                {
-                    obj = obj.transform.parent.gameObject;
-                }
-                cabinetBehavior cabScript = obj.GetComponent<cabinetBehavior>();
-                cabScript.search();
+                case "key":
+                    takeKeyCard(obj);
+                    break;
+                case "rDoor":
+                    doorBehavior doorScript = obj.GetComponent<doorBehavior>();
+                    doorScript.doorOpen();
+                    break;
+                case "uGate":
+                    gateBehavior gateScript = obj.GetComponent<gateBehavior>();
+                    gateScript.gateOpen();
+                    break;
+                case "eDoor":
+                    gateBehavior eDoorScript = obj.GetComponent<gateBehavior>();
+                    eDoorScript.gateOpen();
+                    break;
+                case "cabinet":
+                    // If drawers or handles are clicked, set object to parent cabinet
+                    if (obj.transform.parent != null && obj.transform.parent.tag == "cabinet") obj = obj.transform.parent.gameObject;
+
+                    cabinetBehavior cabScript = obj.GetComponent<cabinetBehavior>();
+                    cabScript.search();
+
+                    if (!hasKey && obj == keyMng.storedCabinet)
+                    {
+                        hasKey = true;
+                    }
+                    break;
             }
         }
     }
@@ -199,10 +210,6 @@ public class playerBehavior : MonoBehaviour
         hasKey = true;
     }
 
-    void openDoor(GameObject obj)
-    {
-        print("Image the door opened");
-    }
 
     #endregion
 

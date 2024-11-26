@@ -9,7 +9,8 @@ TagManager:
   - rDoor
   - uGate
   - gate
-  - sCabinet
+  - cabinet
+  - key
   layers:
   - Default
   - TransparentFX

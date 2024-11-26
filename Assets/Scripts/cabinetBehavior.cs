@@ -8,13 +8,11 @@ public class cabinetBehavior : MonoBehaviour
 
     public void search()
     {
-        if (!isSearched)
+        foreach (Transform child in transform)
         {
-            foreach (Transform child in transform)
-            {
-                child.position = child.position - (transform.forward * 0.4f);
-            }
-            isSearched = true;
+            float dir = isSearched ? 0.4f : -0.4f;
+            child.position = child.position + (transform.forward * dir);
         }
+        isSearched = !isSearched;
     }
 }
