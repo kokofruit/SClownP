@@ -11,7 +11,7 @@ public class playerBehavior : MonoBehaviour
     #region Declare Variables
 
     // Player variables
-    public GameObject player;
+    public static playerBehavior instance;
     public enum states
     {
         idle,
@@ -38,14 +38,17 @@ public class playerBehavior : MonoBehaviour
     float throwForce = 5f;
     float throwUpwardForce = 8f;
 
-    // Key variables
-    public bool hasKey = false;
-
     // UI variables
-    public Image rmbRadial;
-    public TMP_Text output;
+    [SerializeField] Image rmbRadial;
+
+    // Sound
+    [SerializeField] AudioClip coinFlickSound;
 
     #endregion
+    void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {
@@ -53,8 +56,8 @@ public class playerBehavior : MonoBehaviour
         
         // Player variables
         playerRb = GetComponent<Rigidbody>();
-        playerRad = player.GetComponent<SphereCollider>();
-        playerCam = player.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<Camera>();
+        playerRad = GetComponent<SphereCollider>();
+        playerCam = transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<Camera>();
         currState = states.idle;
 
         // Coin variables
@@ -62,7 +65,6 @@ public class playerBehavior : MonoBehaviour
         coin = coinScript.gameObject;
         coinRb = coin.GetComponent<Rigidbody>();
         coinRad = coin.GetComponent<SphereCollider>();
-
         #endregion
     }
 
@@ -75,6 +77,7 @@ public class playerBehavior : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Mouse1))
         {
+            soundFXManager.instance.PlayFXClip(coinFlickSound, transform);
             tossCoin();
         }
         updateRadial();
@@ -115,7 +118,7 @@ public class playerBehavior : MonoBehaviour
     // Set current state based on FPC script
     states stateTest()
     {
-        FirstPersonController fpcScript = player.GetComponent<FirstPersonController>();
+        FirstPersonController fpcScript = GetComponent<FirstPersonController>();
         
         if (fpcScript.isSprinting)
         {
@@ -165,20 +168,37 @@ public class playerBehavior : MonoBehaviour
         if (Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, 2.75f))
         {
             GameObject obj = hit.transform.gameObject;
-            print(obj.name);
-            if (obj.name == "keycard")
+            
+            switch (obj.tag)
             {
-                takeKeyCard(obj);
-            }
-            if (obj.tag == "door")
-            {
-                doorBehavior doorScript = obj.GetComponent<doorBehavior>();
-                doorScript.doorOpen();
-            }
-            if (obj.tag == "gate")
-            {
-                gateBehavior gateScript = obj.GetComponent<gateBehavior>();
-                gateScript.gateOpen();
+                case "key":
+                    takeKeyCard(obj);
+                    break;
+                case "rDoor":
+                    doorBehavior doorScript = obj.GetComponent<doorBehavior>();
+                    doorScript.doorOpen();
+                    break;
+                case "uGate":
+                    gateBehavior gateScript = obj.GetComponent<gateBehavior>();
+                    gateScript.gateOpen();
+                    break;
+                case "eDoor":
+                    gateBehavior eDoorScript = obj.GetComponent<gateBehavior>();
+                    eDoorScript.gateOpen();
+                    break;
+                case "cabinet":
+                    // If drawers or handles are clicked, set object to parent cabinet
+                    if (obj.transform.parent != null && obj.transform.parent.tag == "cabinet") obj = obj.transform.parent.gameObject;
+
+                    cabinetBehavior cabScript = obj.GetComponent<cabinetBehavior>();
+                    cabScript.search();
+
+                    keyManager keyMng = keyManager.instance;
+                    if (!keyMng.playerHasKey && obj == keyMng.storedCabinet)
+                    {
+                        keyMng.playerHasKey = true;
+                    }
+                    break;
             }
         }
     }
@@ -187,13 +207,9 @@ public class playerBehavior : MonoBehaviour
     {
         //Destroy(obj);
         obj.SetActive(false);
-        hasKey = true;
+        keyManager.instance.playerHasKey = true;
     }
 
-    void openDoor(GameObject obj)
-    {
-        print("Image the door opened");
-    }
 
     #endregion
 
@@ -211,7 +227,7 @@ public class playerBehavior : MonoBehaviour
         coinScript.existTimer = tossCooldown;
 
         // set spawnpoint for coin  - by me
-        Vector3 spawnPoint = player.transform.position + playerCam.transform.forward * 1.2f;
+        Vector3 spawnPoint = transform.position + playerCam.transform.forward * 1.2f;
         coin.transform.position = spawnPoint;
 
         // calculate direction
