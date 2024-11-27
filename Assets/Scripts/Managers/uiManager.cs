@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,6 +20,7 @@ public class uiManager : MonoBehaviour
 
     // Timer
     float cutsceneTimer = 0f;
+    string state = "cutscene";
 
     void Start()
     {
@@ -33,7 +35,10 @@ public class uiManager : MonoBehaviour
 
     void Update()
     {
-        startGame();
+        if (state == "cutscene")
+        {
+            startGame();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -53,21 +58,17 @@ public class uiManager : MonoBehaviour
 
     void startGame()
     {
-        //TODO: first time only
+        float frame = Mathf.Floor(cutsceneTimer/0.5f);
 
-        if (cutsceneTimer > 20)
+        if (frame > 13)
         {
+            state = "hud";
             return;
         }
 
-        if (cutsceneTimer <= 0)
-        {
-            startGifImage.sprite = AssetDatabase.LoadAssetAtPath("Assets/UI/StartCutscene/frame_00_delay-0.33s.png", typeof(Sprite)) as Sprite;
-        }
-        else if (cutsceneTimer <= 1)
-        {
-            startGifImage.sprite = AssetDatabase.LoadAssetAtPath("Assets/UI/StartCutscene/frame_08_delay-0.33s.png", typeof(Sprite)) as Sprite;
-        }
+        string path = "Assets/UI/StartCutscene/frame_" + frame.ToString() + ".png";
+        Sprite spr = AssetDatabase.LoadAssetAtPath(path, typeof(Sprite)) as Sprite;
+        startGifImage.sprite = spr;
 
         cutsceneTimer = cutsceneTimer + Time.deltaTime;
     }
