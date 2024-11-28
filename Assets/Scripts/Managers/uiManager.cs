@@ -35,10 +35,7 @@ public class uiManager : MonoBehaviour
 
     void Update()
     {
-        if (state == "cutscene")
-        {
-            startGame();
-        }
+        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -56,20 +53,5 @@ public class uiManager : MonoBehaviour
         Time.timeScale = 0;
     }
 
-    void startGame()
-    {
-        float frame = Mathf.Floor(cutsceneTimer/0.5f);
-
-        if (frame > 13)
-        {
-            state = "hud";
-            return;
-        }
-
-        string path = "Assets/UI/StartCutscene/frame_" + frame.ToString() + ".png";
-        Sprite spr = AssetDatabase.LoadAssetAtPath(path, typeof(Sprite)) as Sprite;
-        startGifImage.sprite = spr;
-
-        cutsceneTimer = cutsceneTimer + Time.deltaTime;
-    }
+    
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class soundFXManager : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class soundFXManager : MonoBehaviour
 
     public static soundFXManager instance;
     [SerializeField] private AudioSource soundFXObject;
+    [SerializeField] AudioMixerGroup fxMixer;
 
     public float volFX = 1f;
 
@@ -26,6 +28,7 @@ public class soundFXManager : MonoBehaviour
 
         audioSource.clip = audioClip;
         audioSource.volume = volFX;
+        audioSource.outputAudioMixerGroup = fxMixer;
         audioSource.Play();
 
         float clipLength = audioSource.clip.length;
