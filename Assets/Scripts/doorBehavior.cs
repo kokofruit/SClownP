@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 
-public class doorBehavior : MonoBehaviour
+public class doorBehavior : MonoBehaviour, interactInterface
 {
     // set og rotation
     Vector3 startRot;
@@ -55,5 +55,11 @@ public class doorBehavior : MonoBehaviour
         }
         Quaternion rot = Quaternion.RotateTowards(transform.rotation, goal, openspeed);
         transform.rotation = rot;
+    }
+
+    public void getLMBVal()
+    {
+        string displayText = isOpen ? "Close" : "Open";
+        uiManager.instance.displayLMB(displayText);
     }
 }

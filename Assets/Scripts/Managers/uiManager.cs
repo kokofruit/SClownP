@@ -4,9 +4,12 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class uiManager : MonoBehaviour
 {
+    public static uiManager instance;
+
     // Player
     GameObject player;
     CapsuleCollider playerBody;
@@ -14,7 +17,14 @@ public class uiManager : MonoBehaviour
 
     // Canvas Groups
     [SerializeField] CanvasGroup winScreen;
+
     [SerializeField] CanvasGroup hud;
+    [SerializeField] CanvasGroup lmbGroup;
+    Image lmbIcon;
+    TextMeshProUGUI lmbText;
+    [SerializeField] Image rmb;
+    [SerializeField] CanvasGroup keygot;
+
     [SerializeField] CanvasGroup startGif;
     Image startGifImage;
 
@@ -22,23 +32,22 @@ public class uiManager : MonoBehaviour
     float cutsceneTimer = 0f;
     string state = "cutscene";
 
+    private void Awake()
+    {
+        instance = this;
+    }
+
     void Start()
     {
         playerScript = playerBehavior.instance;
         player = playerScript.gameObject;
         playerBody = player.GetComponent<CapsuleCollider>();
 
-        startGifImage = startGif.transform.GetChild(1).GetComponent<Image>();
+        lmbIcon = lmbGroup.transform.GetComponentInChildren<Image>();
+        lmbText = lmbIcon.gameObject.transform.GetComponentInChildren<TextMeshProUGUI>();
+        lmbGroup.alpha = 0f;
 
-        
-    }
-
-    void Update()
-    {
-        if (state == "cutscene")
-        {
-            startGame();
-        }
+        startGifImage = startGif.transform.GetChild(1).GetComponent<Image>();        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -56,20 +65,30 @@ public class uiManager : MonoBehaviour
         Time.timeScale = 0;
     }
 
-    void startGame()
+    public void displayLMB(string displayText)
     {
-        float frame = Mathf.Floor(cutsceneTimer/0.5f);
+        lmbGroup.alpha = 1f;
+        lmbText.text = displayText;
+    }
 
-        if (frame > 13)
+    public void hideLMB()
+    {
+        lmbGroup.alpha = 0f;
+    }
+
+    public void updateRadial(float amount)
+    {
+        if (amount <= 1)
         {
-            state = "hud";
-            return;
+            float cooldownPercent = amount;
+            rmb.fillAmount = 1 - cooldownPercent;
         }
+        else rmb.fillAmount = 1;
+    }
 
-        string path = "Assets/UI/StartCutscene/frame_" + frame.ToString() + ".png";
-        Sprite spr = AssetDatabase.LoadAssetAtPath(path, typeof(Sprite)) as Sprite;
-        startGifImage.sprite = spr;
-
-        cutsceneTimer = cutsceneTimer + Time.deltaTime;
+    public void showKeyGot()
+    {
+        keygot.alpha = 1f;
+        print("what");
     }
 }
