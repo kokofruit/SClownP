@@ -218,6 +218,7 @@ public class playerBehavior : MonoBehaviour
             //print(obj.name);
             try
             {
+                textBoxManager.instance.initiateText(obj);
                 obj.GetComponent<interactInterface>().getLMBVal();
             }
             catch (Exception)
