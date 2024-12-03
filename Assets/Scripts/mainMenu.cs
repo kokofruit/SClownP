@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 public class mainMenu : MonoBehaviour
 {
     public string newGameScene;
+    public string settingScene;
+    public string menuScene;
 
     void Start()
     {
@@ -25,7 +27,12 @@ public class mainMenu : MonoBehaviour
 
     public void ButtonSettings()
     {
+        SceneManager.LoadScene(settingScene);
+    }
 
+    public void ButtonReturn()
+    {
+        SceneManager.LoadScene(menuScene);
     }
 
     public void ButtonQuit()

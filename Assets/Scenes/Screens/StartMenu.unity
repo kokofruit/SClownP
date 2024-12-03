@@ -216,6 +216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   newGameScene: L1.2
+  settingScene: SettingsScreen
 --- !u!1 &543371576
 GameObject:
   m_ObjectHideFlags: 0
