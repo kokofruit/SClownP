@@ -13,17 +13,14 @@ public class exitBehavior : MonoBehaviour
 
     private void Start()
     {
-        playerScript = FindObjectOfType<playerBehavior>();
+        playerScript = playerBehavior.instance;
         player = playerScript.gameObject;
         playerBody = player.GetComponent<CapsuleCollider>();
-
-        //winScreen.gameObject.SetActive(false);
-        winScreen.alpha = 0;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other == playerBody && playerScript.hasKey)
+        if (other == playerBody && keyManager.instance.playerHasKey)
         {
             winGame();
         }
@@ -31,9 +28,7 @@ public class exitBehavior : MonoBehaviour
 
     void winGame()
     {
-        //hud.gameObject.SetActive(false);
         hud.alpha = 0;
-        //winScreen.gameObject.SetActive(true);
         winScreen.alpha = 1;
         Time.timeScale = 0;
     }

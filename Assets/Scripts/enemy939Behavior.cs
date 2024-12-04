@@ -13,7 +13,6 @@ public class enemy939Behavior : MonoBehaviour
     #region Declare variables
 
     // Enemy vars
-    public float moveSpeed;
     Rigidbody rb;
     NavMeshAgent nma;
     public enum states
@@ -61,8 +60,6 @@ public class enemy939Behavior : MonoBehaviour
         coin = FindObjectOfType<coinBehavior>().gameObject;
         
         #endregion
-
-        nma.speed = moveSpeed;
     }
 
     void Update()
@@ -132,6 +129,7 @@ public class enemy939Behavior : MonoBehaviour
         else
         {
             nma.stoppingDistance = 0f; // added by me
+            nma.speed = 1f;
             nma.SetDestination(RandomNavSphere(transform.position, 10.0f, floormask));
 
             currState = states.wandering;
@@ -166,6 +164,7 @@ public class enemy939Behavior : MonoBehaviour
     {
         nma.SetDestination(coin.transform.position);
         nma.stoppingDistance = 2f;
+        nma.speed = 2f;
         
         if (nma.pathStatus == NavMeshPathStatus.PathComplete)
         {
@@ -175,25 +174,18 @@ public class enemy939Behavior : MonoBehaviour
 
     void doDistracted()
     {
-        Quaternion target = Quaternion.LookRotation(coin.transform.position);
-        var rotation = Quaternion.RotateTowards(transform.rotation, target, turnSpeed);
-        transform.rotation = rotation;
+        //Quaternion target = Quaternion.LookRotation(coin.transform.position);
+        //var rotation = Quaternion.RotateTowards(transform.rotation, target, turnSpeed);
+        //transform.rotation = rotation;
     }
 
     void doChasing()
     {
         nma.SetDestination(player.transform.position);
         nma.stoppingDistance = 0f;
+        nma.speed = 3f;
     }
 
     #endregion
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider == playerCap)
-        {
-            print("hit!");
-        }
-    }
 
 }

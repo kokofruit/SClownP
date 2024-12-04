@@ -3,7 +3,14 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - enemy
+  - eDoor
+  - rDoor
+  - uGate
+  - gate
+  - cabinet
+  - key
   layers:
   - Default
   - TransparentFX
