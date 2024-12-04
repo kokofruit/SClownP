@@ -12,8 +12,6 @@ public class soundFXManager : MonoBehaviour
     [SerializeField] private AudioSource soundFXObject;
     [SerializeField] AudioMixerGroup fxMixer;
 
-    public float volFX = 1f;
-
     void Awake()
     {
         if (instance == null)
@@ -27,7 +25,6 @@ public class soundFXManager : MonoBehaviour
         AudioSource audioSource = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
 
         audioSource.clip = audioClip;
-        audioSource.volume = volFX;
         audioSource.outputAudioMixerGroup = fxMixer;
         audioSource.Play();
 
