@@ -273,7 +273,7 @@ public class playerBehavior : MonoBehaviour
 
         // update timers
         tossTimer = tossCooldown;
-        coinScript.existTimer = tossCooldown;
+        //coinScript.existTimer = tossCooldown;
 
         // set spawnpoint for coin  - by me
         Vector3 spawnPoint = transform.position + playerCam.transform.forward * 1.2f;

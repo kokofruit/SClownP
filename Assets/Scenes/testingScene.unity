@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2670,7 +2670,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundFXObject: {fileID: 7866235754291886010, guid: b16c6146bc64ad14d8f16b3fdc0cd02f, type: 3}
   fxMixer: {fileID: 2862221588429479656, guid: 7541e1d8588e60746b3f760e51048d3f, type: 2}
-  volFX: 1
 --- !u!4 &1542517488 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 468379249205792187, guid: 3c3c6c2b27581fc4e8e1e12c70a4e207, type: 3}
@@ -3912,7 +3911,7 @@ PrefabInstance:
     - target: {fileID: 4383156625998234399, guid: 3c3c6c2b27581fc4e8e1e12c70a4e207, type: 3}
       propertyPath: coinFlickSound
       value: 
-      objectReference: {fileID: 8300000, guid: 65cc294bf56023146926e57bb73dcb0e, type: 3}
+      objectReference: {fileID: 8300000, guid: cb709b36fc4f32145900439cacfdda37, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3982,6 +3981,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4592448858594538944, guid: 25f8cea2218bc6143b6f356de00b8e35, type: 3}
+      propertyPath: landSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 659ff70cd14db3547820c052ff258f8f, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
