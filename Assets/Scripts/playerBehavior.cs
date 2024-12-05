@@ -11,7 +11,7 @@ public class playerBehavior : MonoBehaviour
     #region Declare Variables
 
     // Player variables
-    public GameObject player;
+    public static playerBehavior instance;
     public enum states
     {
         idle,
@@ -38,14 +38,17 @@ public class playerBehavior : MonoBehaviour
     float throwForce = 5f;
     float throwUpwardForce = 8f;
 
-    // Key variables
-    public bool hasKey = false;
-
     // UI variables
-    public Image rmbRadial;
-    public TMP_Text output;
+    [SerializeField] Image rmbRadial;
+
+    // Sound
+    [SerializeField] AudioClip coinFlickSound;
 
     #endregion
+    void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {
@@ -53,8 +56,8 @@ public class playerBehavior : MonoBehaviour
         
         // Player variables
         playerRb = GetComponent<Rigidbody>();
-        playerRad = player.GetComponent<SphereCollider>();
-        playerCam = player.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<Camera>();
+        playerRad = GetComponent<SphereCollider>();
+        playerCam = transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<Camera>();
         currState = states.idle;
 
         // Coin variables
@@ -62,7 +65,6 @@ public class playerBehavior : MonoBehaviour
         coin = coinScript.gameObject;
         coinRb = coin.GetComponent<Rigidbody>();
         coinRad = coin.GetComponent<SphereCollider>();
-
         #endregion
     }
 
@@ -75,9 +77,10 @@ public class playerBehavior : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Mouse1))
         {
+            soundFXManager.instance.PlayFXClip(coinFlickSound, transform);
             tossCoin();
         }
-        updateRadial();
+        uiManager.instance.updateRadial(tossTimer / tossCooldown);
 
         // Update state
         if (currState != states.locked)
@@ -104,10 +107,7 @@ public class playerBehavior : MonoBehaviour
         }
 
         // Interact ability
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            interact();
-        }
+        interact(Input.GetKeyDown(KeyCode.Mouse0));
     }
 
     #region Behavior
@@ -115,7 +115,7 @@ public class playerBehavior : MonoBehaviour
     // Set current state based on FPC script
     states stateTest()
     {
-        FirstPersonController fpcScript = player.GetComponent<FirstPersonController>();
+        FirstPersonController fpcScript = GetComponent<FirstPersonController>();
         
         if (fpcScript.isSprinting)
         {
@@ -159,27 +159,75 @@ public class playerBehavior : MonoBehaviour
 
     #region Interaction Ability
 
-    void interact()
+    void interact(bool mousePressed)
     {
         RaycastHit hit;
-        if (Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, 2.75f))
+        if (Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, 2.75f)/* && hit.transform.gameObject.GetComponent<interactInterface>() != null*/)
         {
             GameObject obj = hit.transform.gameObject;
-            print(obj.name);
-            if (obj.name == "keycard")
+
+            switch (obj.tag)
             {
-                takeKeyCard(obj);
+                case "key":
+                    if (mousePressed) takeKeyCard(obj);
+                    break;
+                case "rDoor":
+                    if (mousePressed)
+                    {
+                        doorBehavior doorScript = obj.GetComponent<doorBehavior>();
+                        doorScript.doorOpen();
+                    }
+                    break;
+                case "uGate":
+                    if (mousePressed)
+                    {
+                        gateBehavior gateScript = obj.GetComponent<gateBehavior>();
+                        gateScript.gateOpen();
+                    }
+                    break;
+                case "eDoor":
+                    if (mousePressed)
+                    {
+                        gateBehavior eDoorScript = obj.GetComponent<gateBehavior>();
+                        eDoorScript.gateOpen();
+                    }
+                    break;
+                case "cabinet":
+                    // If drawers or handles are clicked, set object to parent cabinet
+                    if (obj.transform.parent != null && obj.transform.parent.tag == "cabinet") obj = obj.transform.parent.gameObject;
+
+                    cabinetBehavior cabScript = obj.GetComponent<cabinetBehavior>();
+
+                    if (mousePressed)
+                    {
+                        cabScript.search();
+
+                        keyManager keyMng = keyManager.instance;
+                        if (!keyMng.playerHasKey && obj == keyMng.storedCabinet)
+                        {
+                            keyMng.playerHasKey = true;
+                            uiManager.instance.showKeyGot();
+                        }
+                    }
+                    break;
+                default:
+                    break;
             }
-            if (obj.tag == "door")
+            
+            //highlight(obj);
+            //print(obj.name);
+            try
             {
-                doorBehavior doorScript = obj.GetComponent<doorBehavior>();
-                doorScript.doorOpen();
+                obj.GetComponent<interactInterface>().getLMBVal();
             }
-            if (obj.tag == "gate")
+            catch (Exception)
             {
-                gateBehavior gateScript = obj.GetComponent<gateBehavior>();
-                gateScript.gateOpen();
+                uiManager.instance.hideLMB();
             }
+        }
+        else
+        {
+            uiManager.instance.hideLMB();
         }
     }
 
@@ -187,12 +235,28 @@ public class playerBehavior : MonoBehaviour
     {
         //Destroy(obj);
         obj.SetActive(false);
-        hasKey = true;
+        keyManager.instance.playerHasKey = true;
+        uiManager.instance.showKeyGot();
     }
 
-    void openDoor(GameObject obj)
+    public void highlight(GameObject obj)
     {
-        print("Image the door opened");
+        if (obj.GetComponent<Outline>() == null)
+        {
+            Outline outline = obj.AddComponent<Outline>();
+            outline.OutlineWidth = 10;
+        }
+    }
+
+    void deselect()
+    {
+        uiManager.instance.hideLMB();
+
+        // for every object with outline, remove that shit
+        foreach (Outline item in FindObjectsOfType(typeof(Outline)))
+        {
+            Destroy(item);
+        }
     }
 
     #endregion
@@ -211,7 +275,7 @@ public class playerBehavior : MonoBehaviour
         coinScript.existTimer = tossCooldown;
 
         // set spawnpoint for coin  - by me
-        Vector3 spawnPoint = player.transform.position + playerCam.transform.forward * 1.2f;
+        Vector3 spawnPoint = transform.position + playerCam.transform.forward * 1.2f;
         coin.transform.position = spawnPoint;
 
         // calculate direction
@@ -238,17 +302,6 @@ public class playerBehavior : MonoBehaviour
     }
 
     #endregion
-
-    // Update cooldown radial UI
-    void updateRadial()
-    {
-        if (tossCooldown > 0)
-        {
-            float cooldownPercent = tossTimer / tossCooldown;
-            rmbRadial.fillAmount = 1 - cooldownPercent;
-        }
-    }
-
     #endregion
 
     #region Lose Game

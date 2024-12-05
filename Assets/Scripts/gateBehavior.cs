@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class gateBehavior : MonoBehaviour
 {
+    bool isGate;
+
     // set og position
     Vector3 startPos;
     float height;
@@ -18,6 +20,7 @@ public class gateBehavior : MonoBehaviour
 
     void Start()
     {
+        isGate = tag == "uGate";
         startPos = transform.position;
         height = GetComponent<Renderer>().bounds.size.y;
     }
@@ -41,7 +44,8 @@ public class gateBehavior : MonoBehaviour
             }
             else
             {
-                goal = new Vector3(startPos.x, startPos.y + height, startPos.z);
+                if (isGate) goal = new Vector3(startPos.x, startPos.y + height, startPos.z);
+                else goal = new Vector3(startPos.x, startPos.y, startPos.z - 2.5f);
             }
             isMoving = true;
         }

@@ -2,21 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class cabinetBehavior : MonoBehaviour
+public class cabinetBehavior : MonoBehaviour, interactInterface
 {
-    
-    // Start is called before the first frame update
-    void Start()
+    public bool isOpen = false;
+
+    public void search()
     {
-        foreach(Transform child in transform)
+        foreach (Transform child in transform)
         {
-            child.position = Vector3.zero;
+            float dir = isOpen ? 0.4f : -0.4f;
+            child.position = child.position + (transform.forward * dir);
         }
+        isOpen = !isOpen;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void getLMBVal()
     {
-        
+        string displayText = isOpen ? "Close" : "Search";
+        uiManager.instance.displayLMB(displayText);
     }
 }

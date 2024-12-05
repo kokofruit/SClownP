@@ -13,14 +13,14 @@ public class exitBehavior : MonoBehaviour
 
     private void Start()
     {
-        playerScript = FindObjectOfType<playerBehavior>();
+        playerScript = playerBehavior.instance;
         player = playerScript.gameObject;
         playerBody = player.GetComponent<CapsuleCollider>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other == playerBody && playerScript.hasKey)
+        if (other == playerBody && keyManager.instance.playerHasKey)
         {
             winGame();
         }
