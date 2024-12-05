@@ -17,7 +17,6 @@ public class uiManager : MonoBehaviour
 
     // Canvas Groups
     [SerializeField] CanvasGroup winScreen;
-
     [SerializeField] CanvasGroup hud;
     [SerializeField] CanvasGroup lmbGroup;
     Image lmbIcon;

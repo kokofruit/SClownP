@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEditor;
+using UnityEngine.Audio;
 
 public class mainMenu2 : MonoBehaviour
 {
@@ -15,11 +16,20 @@ public class mainMenu2 : MonoBehaviour
 
     float cutsceneTimer = -1f;
 
+    [SerializeField] AudioClip MulchSong;
+    
+
+    private void Start()
+    {
+        soundMusicManager.instance.PlaySong(MulchSong);
+    }
+
     public void ButtonStart()
     {
         startMenu.interactable = false;
         startGif.alpha = 1f;
         cutsceneTimer = 0f;
+        soundMusicManager.instance.StopSong();
     }
 
     private void Update()
