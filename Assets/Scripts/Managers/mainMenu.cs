@@ -3,33 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class mainMenu : MonoBehaviour
-{
-    //public string newGameScene;
+//public class mainMenu : MonoBehaviour
+//{
+//    //public string newGameScene;
 
-    //void Start()
-    //{
+//    //void Start()
+//    //{
         
-    //}
+//    //}
 
     
-    //void Update()
-    //{
+//    //void Update()
+//    //{
         
-    //}
+//    //}
 
-    //public void ButtonStart()
-    //{
-    //    SceneManager.LoadScene(newGameScene);
-    //}
+//    //public void ButtonStart()
+//    //{
+//    //    SceneManager.LoadScene(newGameScene);
+//    //}
 
-    //public void ButtonSettings()
-    //{
+//    //public void ButtonSettings()
+//    //{
 
-    //}
+//    //}
 
-    //public void ButtonQuit()
-    //{
-    //    Application.Quit();
-    //}
-}
+//    //public void ButtonQuit()
+//    //{
+//    //    Application.Quit();
+//    //}
+//}
