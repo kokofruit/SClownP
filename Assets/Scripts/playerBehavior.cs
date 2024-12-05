@@ -215,7 +215,7 @@ public class playerBehavior : MonoBehaviour
             }
             
             //highlight(obj);
-            //print(obj.name);
+            print(obj.name);
             try
             {
                 textBoxManager.instance.initiateText(obj);
