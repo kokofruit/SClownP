@@ -205,7 +205,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d31df1ee6cde7d746b512f37ab4e6c27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  openspeed: 0.01
+  openspeed: 0.04
+  gateOpenFX: {fileID: 8300000, guid: 129fb63af1725ba42909c6e0e8af9c5b, type: 3}
+  elevatorFX: {fileID: 8300000, guid: 0e01b184882b6b94f8f91413feabe358, type: 3}
 --- !u!1 &4944456545152385072
 GameObject:
   m_ObjectHideFlags: 0

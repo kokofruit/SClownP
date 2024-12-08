@@ -24,9 +24,6 @@ public class uiManager : MonoBehaviour
     [SerializeField] Image rmb;
     [SerializeField] CanvasGroup keygot;
 
-    [SerializeField] CanvasGroup startGif;
-    Image startGifImage;
-
     // Timer
     float cutsceneTimer = 0f;
     string state = "cutscene";
@@ -44,9 +41,7 @@ public class uiManager : MonoBehaviour
 
         lmbIcon = lmbGroup.transform.GetComponentInChildren<Image>();
         lmbText = lmbIcon.gameObject.transform.GetComponentInChildren<TextMeshProUGUI>();
-        lmbGroup.alpha = 0f;
-
-        startGifImage = startGif.transform.GetChild(1).GetComponent<Image>();        
+        lmbGroup.alpha = 0f;      
     }
 
     private void OnTriggerEnter(Collider other)

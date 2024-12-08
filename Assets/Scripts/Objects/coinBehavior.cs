@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class coinBehavior : MonoBehaviour
@@ -18,11 +19,11 @@ public class coinBehavior : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name == "surface")
+        if (collision.gameObject.GetComponent<NavMeshSurface>() != null)
         {
 
             //int amount = collision.contactCount;
-            coinRad.radius = 8f;
+            coinRad.radius = 13f;
             soundFXManager.instance.PlayFXClip(landSound, transform);
             Destroy(gameObject, 4f);
         }
