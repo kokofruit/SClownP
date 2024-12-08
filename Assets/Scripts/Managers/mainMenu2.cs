@@ -9,6 +9,8 @@ using UnityEngine.Audio;
 public class mainMenu2 : MonoBehaviour
 {
     public string newGameScene;
+    public string settingsScene;
+    public string loseScene;
 
     [SerializeField] CanvasGroup startMenu;
     [SerializeField] CanvasGroup startGif;
@@ -65,7 +67,7 @@ public class mainMenu2 : MonoBehaviour
 
     public void ButtonSettings()
     {
-        // TODO
+        SceneManager.LoadScene(settingsScene);
     }
 
     public void ButtonQuit()
