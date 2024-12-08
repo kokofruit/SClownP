@@ -43,7 +43,9 @@ AudioMixerController:
   m_SuspendThreshold: -80
   m_EnableSuspend: 1
   m_UpdateMode: 0
-  m_ExposedParameters: []
+  m_ExposedParameters:
+  - guid: 0429cd8c03be6554484c78095cdee37f
+    name: fxVol
   m_AudioMixerGroupViews:
   - guids:
     - 9b274832afb9f9e478b876df4c17c9f0
@@ -69,7 +71,7 @@ AudioMixerGroupController:
   m_Send: 00000000000000000000000000000000
   m_Effects:
   - {fileID: 24400004}
-  m_UserColorIndex: 0
+  m_UserColorIndex: 3
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
@@ -98,7 +100,7 @@ AudioMixerSnapshotController:
   m_SnapshotID: 0829d92dea8e8cb48a02754ea966bf20
   m_FloatValues:
     b131a3d43eb8a2c4682fd3bdef575a43: 0
-    ec791b6c268d3b1429215a565fa99f63: -20.337845
+    ec791b6c268d3b1429215a565fa99f63: 0
     0429cd8c03be6554484c78095cdee37f: 0
   m_TransitionOverrides: {}
 --- !u!243 &2862221588429479656
@@ -116,7 +118,7 @@ AudioMixerGroupController:
   m_Send: 00000000000000000000000000000000
   m_Effects:
   - {fileID: -5277690920313601425}
-  m_UserColorIndex: 0
+  m_UserColorIndex: 1
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
@@ -135,7 +137,7 @@ AudioMixerGroupController:
   m_Send: 00000000000000000000000000000000
   m_Effects:
   - {fileID: -5213091980083029560}
-  m_UserColorIndex: 0
+  m_UserColorIndex: 6
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
