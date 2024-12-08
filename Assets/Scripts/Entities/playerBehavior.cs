@@ -42,7 +42,6 @@ public class playerBehavior : MonoBehaviour
     // Sound
     [SerializeField] AudioClip coinFlickSound;
     [SerializeField] AudioClip dogAttack;
-    [SerializeField] AudioClip honk;
     [SerializeField] AudioClip keySound;
 
     #endregion
@@ -62,8 +61,6 @@ public class playerBehavior : MonoBehaviour
         currState = states.idle;
 
         #endregion
-
-        soundFXManager.instance.PlayFXClip(honk, transform);
     }
 
     void Update()

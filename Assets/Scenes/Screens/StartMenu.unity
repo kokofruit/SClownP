@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 53087419}
   - component: {fileID: 53087418}
+  - component: {fileID: 53087420}
   m_Layer: 0
   m_Name: Sound Manager
   m_TagString: Untagged
@@ -169,6 +170,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &53087420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 53087417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65f0d6fb4fed7e0439570bf30339b06d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundFXObject: {fileID: 7866235754291886010, guid: a438ceb28e1f9e541a817a0e0ec66df3, type: 3}
+  fxMixer: {fileID: 2862221588429479656, guid: 7541e1d8588e60746b3f760e51048d3f, type: 2}
+  mulchSteps: []
+  scpSteps: []
+  stepPlayers: []
 --- !u!1 &514719528
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,14 +279,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4d240e6ca50892439d0447d1b33ea34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newGameScene: L1.2
+  newGameScene: L1.3
   settingsScene: SettingsScreen
   loseScene: LoseScreen
   startMenu: {fileID: 1700281019}
   startGif: {fileID: 751513262}
   startGifImage: {fileID: 651747692}
+  sprites:
+  - {fileID: 21300000, guid: 1638a38dabc896742a2ab3560b43e40f, type: 3}
+  - {fileID: 21300000, guid: d1cf04a72b6a4c845948910271b59ea6, type: 3}
+  - {fileID: 21300000, guid: c8ebab816875d0f489cbeca9b3d28ab5, type: 3}
+  - {fileID: 21300000, guid: d152a04aaec7db64abf2505336693679, type: 3}
+  - {fileID: 21300000, guid: 247a3a9b0c6f5cb48a922566595ab029, type: 3}
+  - {fileID: 21300000, guid: 49d0b00873cbb3441aeb2da64ed0ae1c, type: 3}
+  - {fileID: 21300000, guid: c78cb56d089aaa54191fc149130de03b, type: 3}
+  - {fileID: 21300000, guid: 295d4fc8e2a823648baeee80d2aa56fd, type: 3}
+  - {fileID: 21300000, guid: f82d65540daae4d4d9f960f8b46d60c3, type: 3}
+  - {fileID: 21300000, guid: c613c2d895f2a864ea2b36fe2baf0333, type: 3}
+  - {fileID: 21300000, guid: a6b3c7c0ce6d64746bc957750cddf3bf, type: 3}
+  - {fileID: 21300000, guid: 260257f3f79ca464eb340caacc2c8821, type: 3}
+  - {fileID: 21300000, guid: 9b1976e2532bbc342b16cb68b33f94ee, type: 3}
+  - {fileID: 21300000, guid: 5cd7c8f980ee17c4ba10dc2f421b8b75, type: 3}
+  - {fileID: 21300000, guid: 04cfcb1c2d09ed141a57317c7302fad8, type: 3}
+  - {fileID: 21300000, guid: 23fc8e8ba8c0006448299a8facabb477, type: 3}
   MulchSong: {fileID: 8300000, guid: 9dee84efa88419645bfd00042cf404c8, type: 3}
   CutsceneSound: {fileID: 8300000, guid: b55d603d466b4854cb4c971647973b68, type: 3}
+  selectSFX: {fileID: 8300000, guid: 0fdcab782542d0445b1024ee8a8130d8, type: 3}
 --- !u!1 &543371576
 GameObject:
   m_ObjectHideFlags: 0
@@ -345,7 +381,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
+  m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -608,10 +644,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 514719529}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 500, y: 0}
-  m_SizeDelta: {x: 659, y: 127}
+  m_SizeDelta: {x: -1261, y: -953}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1690625278
 MonoBehaviour:
@@ -919,10 +955,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 514719529}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 500, y: 240}
-  m_SizeDelta: {x: 659, y: 127}
+  m_SizeDelta: {x: -1261, y: -953}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1774581539
 MonoBehaviour:
@@ -1080,10 +1116,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 514719529}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -474, y: -30}
-  m_SizeDelta: {x: 526, y: 939}
+  m_SizeDelta: {x: -1394, y: -141}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1841738167
 MonoBehaviour:
@@ -1153,10 +1189,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 514719529}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 500, y: -240}
-  m_SizeDelta: {x: 659, y: 127}
+  m_SizeDelta: {x: -1261, y: -953}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2085614040
 MonoBehaviour:
