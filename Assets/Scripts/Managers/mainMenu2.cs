@@ -15,15 +15,23 @@ public class mainMenu2 : MonoBehaviour
     [SerializeField] CanvasGroup startMenu;
     [SerializeField] CanvasGroup startGif;
     [SerializeField] Image startGifImage;
+    [SerializeField] Sprite[] sprites;
 
     float cutsceneTimer = -1f;
 
     [SerializeField] AudioClip MulchSong;
-    
+    public static bool songHasPlayed = false;
+    [SerializeField] AudioClip CutsceneSound;
+    [SerializeField] AudioClip selectSFX;
+
 
     private void Start()
     {
-        soundMusicManager.instance.PlaySong(MulchSong);
+        if (!songHasPlayed)
+        {
+            soundMusicManager.instance.PlaySong(MulchSong);
+            songHasPlayed=true;
+        }
     }
 
     public void ButtonStart()
@@ -31,7 +39,8 @@ public class mainMenu2 : MonoBehaviour
         startMenu.interactable = false;
         startGif.alpha = 1f;
         cutsceneTimer = 0f;
-        soundMusicManager.instance.StopSong();
+        soundFXManager.instance.PlayFXClip(selectSFX,transform);
+        soundMusicManager.instance.PlaySong(CutsceneSound);
     }
 
     private void Update()
@@ -46,15 +55,16 @@ public class mainMenu2 : MonoBehaviour
     {
         float frame = Mathf.Floor(cutsceneTimer / 0.5f);
 
-        if (frame > 12)
+        if (frame > 14)
         {
             startMenu.interactable = true;
             StartGame();
             return;
         }
 
-        string path = "Assets/UI/StartCutscene/frame_" + frame.ToString() + ".png";
-        Sprite spr = AssetDatabase.LoadAssetAtPath(path, typeof(Sprite)) as Sprite;
+        //string path = "Assets/UI/StartCutscene/frame_" + frame.ToString() + ".png";
+        //Sprite spr = AssetDatabase.LoadAssetAtPath(path, typeof(Sprite)) as Sprite;
+        Sprite spr = sprites[(int)frame];
         startGifImage.sprite = spr;
 
         cutsceneTimer = cutsceneTimer + Time.deltaTime;
@@ -72,13 +82,10 @@ public class mainMenu2 : MonoBehaviour
 
     public void ButtonQuit()
     {
-        if (UnityEditor.EditorApplication.isPlaying)
-        {
+        #if UNITY_EDITOR
             EditorApplication.isPlaying = false;
-        }
-        else
-        {
+        #else
             Application.Quit();
-        }
+        #endif
     }
 }

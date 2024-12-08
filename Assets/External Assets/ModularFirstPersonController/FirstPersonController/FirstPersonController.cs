@@ -505,16 +505,19 @@ public class FirstPersonController : MonoBehaviour
             if(isSprinting)
             {
                 timer += Time.deltaTime * (bobSpeed + sprintSpeed);
+                soundFXManager.instance.PlayFootStep("mulch", "sprint");
             }
             // Calculates HeadBob speed during crouched movement
             else if (isCrouched)
             {
                 timer += Time.deltaTime * (bobSpeed * speedReduction);
+                soundFXManager.instance.PlayFootStep("mulch", "crouch");
             }
             // Calculates HeadBob speed during walking
             else
             {
                 timer += Time.deltaTime * bobSpeed;
+                soundFXManager.instance.PlayFootStep("mulch", "walk");
             }
             // Applies HeadBob movement
             joint.localPosition = new Vector3(jointOriginalPos.x + Mathf.Sin(timer) * bobAmount.x, jointOriginalPos.y + Mathf.Sin(timer) * bobAmount.y, jointOriginalPos.z + Mathf.Sin(timer) * bobAmount.z);
