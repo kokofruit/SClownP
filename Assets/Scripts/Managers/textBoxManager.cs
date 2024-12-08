@@ -13,7 +13,7 @@ public class textBoxManager : MonoBehaviour
     [SerializeField] CanvasGroup textboxGroup;
     [SerializeField] TextMeshProUGUI textboxText;
 
-    Dictionary<string, List<string>> interactionTexts = new();
+    public Dictionary<string, List<string>> interactionTexts = new();
     List<string> current = null;
     int currentIndex = -1;
 
@@ -23,7 +23,11 @@ public class textBoxManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        interactionTexts.Add("FirstDoor", new List<string>() { "Let's blow this popsicle stand >:o)","[Press LMB to interact]" });
+        interactionTexts.Add("Spawn", new List<string>() { "What the *honk* is going on? :o(", "I'm... out of the arcade cabinet?", "Something doesn't seem right..." });
+        interactionTexts.Add("FirstDoor", new List<string>() { "Whatever, let's blow this popsicle stand >:o)","[Press LMB to Interact]" });
+        interactionTexts.Add("Nobody", new List<string>() { "There's nobody here.","Did something bad happen?" });
+        interactionTexts.Add("RightButton", new List<string>() { "[Press RMB to Throw a Distraction]", "[Hold CTRL to Sneak]" });
+        interactionTexts.Add("NeedKeycard", new List<string>() { "It requires a keycard >:o(","There must be one arond here somewhere." });
     }
 
     public void initiateText(GameObject obj)

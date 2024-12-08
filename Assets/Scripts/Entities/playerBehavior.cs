@@ -164,7 +164,10 @@ public class playerBehavior : MonoBehaviour
             switch (obj.tag)
             {
                 case "key":
-                    if (mousePressed) takeKeyCard(obj);
+                    if (mousePressed) {
+                        obj.SetActive(false);
+                        takeKeyCard();
+                    }
                     break;
                 case "rDoor":
                     if (mousePressed)
@@ -200,9 +203,7 @@ public class playerBehavior : MonoBehaviour
                         keyManager keyMng = keyManager.instance;
                         if (!keyMng.playerHasKey && obj == keyMng.storedCabinet)
                         {
-                            keyMng.playerHasKey = true;
-                            uiManager.instance.showKeyGot();
-                            soundFXManager.instance.PlayFXClip(keySound, transform);
+                            takeKeyCard();
                         }
                     }
                     break;
@@ -228,12 +229,12 @@ public class playerBehavior : MonoBehaviour
         }
     }
 
-    void takeKeyCard(GameObject obj)
+    void takeKeyCard()
     {
-        //Destroy(obj);
-        obj.SetActive(false);
         keyManager.instance.playerHasKey = true;
         uiManager.instance.showKeyGot();
+        soundFXManager.instance.PlayFXClip(keySound, transform);
+        if (textBoxManager.instance.interactionTexts.ContainsKey("NeedKeycard")) textBoxManager.instance.interactionTexts.Remove("NeedKeycard");
     }
 
     public void highlight(GameObject obj)

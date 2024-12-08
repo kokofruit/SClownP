@@ -13,8 +13,8 @@ public class enemy939Behavior : MonoBehaviour
     #region Declare variables
 
     // Enemy vars
-    Rigidbody rb;
     NavMeshAgent nma;
+    Animator ant;
     public enum states
     {
         idle,
@@ -49,8 +49,8 @@ public class enemy939Behavior : MonoBehaviour
         #region Get Variables
 
         // Enemy vars
-        rb = GetComponent<Rigidbody>();
         nma = GetComponent<NavMeshAgent>();
+        ant = GetComponent<Animator>();
 
         // Player vars
         playerScript = FindObjectOfType<playerBehavior>();
@@ -93,9 +93,10 @@ public class enemy939Behavior : MonoBehaviour
                 soundFXManager.instance.PlayFXClip(chasingGrowl, transform);
             }
         }
-        else if (other.gameObject.GetComponent<coinBehavior>() is coinBehavior && currState != states.chasing)
+        if (other.gameObject.GetComponent<coinBehavior>() is coinBehavior)
         {
             soundFXManager.instance.PlayFXClip(distractedGrowl, transform);
+            ant.SetInteger("stateA", 1);
             currState = states.seeking;
         }
     }
@@ -104,6 +105,7 @@ public class enemy939Behavior : MonoBehaviour
     {
         if (other.gameObject == player)
         {
+            ant.SetInteger("stateA", 2);
             currState = states.chasing;
             playerScript.currState = playerBehavior.states.locked;
         }
@@ -113,6 +115,7 @@ public class enemy939Behavior : MonoBehaviour
     {
         if (other.gameObject == player)
         {
+            ant.SetInteger("stateA", 0);
             currState = states.idle;
             playerScript.currState = playerBehavior.states.idle;
         }
@@ -127,6 +130,7 @@ public class enemy939Behavior : MonoBehaviour
 
     void doIdle()
     {
+        
         if (waitTimer > 0)
         {
             waitTimer -= Time.deltaTime;
@@ -134,10 +138,11 @@ public class enemy939Behavior : MonoBehaviour
         }
         else
         {
-            nma.stoppingDistance = 0f; // added by me
+            nma.stoppingDistance = 0f;
             nma.speed = 1f;
             nma.SetDestination(RandomNavSphere(transform.position, 10.0f, floormask));
 
+            ant.SetInteger("stateA", 1);
             currState = states.wandering;
         }
     }
@@ -148,6 +153,7 @@ public class enemy939Behavior : MonoBehaviour
         {
             waitTimer = UnityEngine.Random.Range(3.0f, 4.0f);
 
+            ant.SetInteger("stateA", 0);
             currState = states.idle;
         }
         soundFXManager.instance.PlayFootStep("939", "crouch");
@@ -176,6 +182,7 @@ public class enemy939Behavior : MonoBehaviour
 
         if (Vector3.Distance(transform.position, nma.destination) < 2f)
         {
+            ant.SetInteger("stateA", 0);
             currState = states.distracted;
         }
     }
@@ -187,6 +194,7 @@ public class enemy939Behavior : MonoBehaviour
         //transform.rotation = rotation;
         if (FindObjectOfType<coinBehavior>() == null)
         {
+            ant.SetInteger("stateA", 0);
             currState = states.idle;
         }
     }
