@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using TMPro;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
+using UnityEngine.Audio;
 public class textBoxManager : MonoBehaviour
 {
     public static textBoxManager instance;
@@ -15,6 +16,9 @@ public class textBoxManager : MonoBehaviour
     Dictionary<string, List<string>> interactionTexts = new();
     List<string> current = null;
     int currentIndex = -1;
+
+    [SerializeField] AudioMixer masterMixer;
+    public float tempFXVol;
 
     private void Awake()
     {
@@ -35,6 +39,8 @@ public class textBoxManager : MonoBehaviour
 
             showDialogue();
 
+            masterMixer.GetFloat("fxVol", out tempFXVol);
+            masterMixer.SetFloat("fxVol", -80f);
             Time.timeScale = 0;
         }
     }
@@ -61,6 +67,7 @@ public class textBoxManager : MonoBehaviour
                 textboxGroup.alpha = 0f;
                 current = null;
                 currentIndex = -1;
+                masterMixer.SetFloat("fxVol", tempFXVol);
                 Time.timeScale = 1f;
             }
         }

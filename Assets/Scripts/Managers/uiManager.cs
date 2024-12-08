@@ -88,6 +88,5 @@ public class uiManager : MonoBehaviour
     public void showKeyGot()
     {
         keygot.alpha = 1f;
-        print("what");
     }
 }
