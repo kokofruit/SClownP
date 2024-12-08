@@ -60,7 +60,7 @@ public class doorBehavior : MonoBehaviour, interactInterface
             isMoving = false;
             return;
         }
-        Quaternion rot = Quaternion.RotateTowards(transform.rotation, goal, openspeed);
+        Quaternion rot = Quaternion.RotateTowards(transform.rotation, goal, openspeed * Time.deltaTime);
         transform.rotation = rot;
     }
 
