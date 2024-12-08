@@ -19,11 +19,17 @@ public class mainMenu2 : MonoBehaviour
     float cutsceneTimer = -1f;
 
     [SerializeField] AudioClip MulchSong;
-    
+    public static bool songHasPlayed = false;
+    [SerializeField] AudioClip CutsceneSound;
+
 
     private void Start()
     {
-        soundMusicManager.instance.PlaySong(MulchSong);
+        if (!songHasPlayed)
+        {
+            soundMusicManager.instance.PlaySong(MulchSong);
+            songHasPlayed=true;
+        }
     }
 
     public void ButtonStart()
@@ -31,7 +37,7 @@ public class mainMenu2 : MonoBehaviour
         startMenu.interactable = false;
         startGif.alpha = 1f;
         cutsceneTimer = 0f;
-        soundMusicManager.instance.StopSong();
+        soundMusicManager.instance.PlaySong(CutsceneSound);
     }
 
     private void Update()
@@ -46,7 +52,7 @@ public class mainMenu2 : MonoBehaviour
     {
         float frame = Mathf.Floor(cutsceneTimer / 0.5f);
 
-        if (frame > 12)
+        if (frame > 14)
         {
             startMenu.interactable = true;
             StartGame();
