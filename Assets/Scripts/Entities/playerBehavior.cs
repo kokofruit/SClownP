@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.UI;
 
@@ -33,8 +34,8 @@ public class playerBehavior : MonoBehaviour
     public float tossCooldown;
     float tossTimer = 0f;
     float torqueForce = 18f;
-    float throwForce = 5f;
-    float throwUpwardForce = 8f;
+    public float throwForce = 5f;
+    public float throwUpwardForce = 8f;
 
     // UI variables
     [SerializeField] Image rmbRadial;
@@ -79,10 +80,10 @@ public class playerBehavior : MonoBehaviour
         uiManager.instance.updateRadial(tossTimer / tossCooldown);
 
         // Update state
-        if (currState != states.locked)
-        {
-            currState = stateTest();
-        }
+        //if (currState != states.locked)
+        //{
+        currState = stateTest();
+        //}
 
         // Follow state behavior
         switch (currState)
@@ -276,7 +277,7 @@ public class playerBehavior : MonoBehaviour
         tossTimer = tossCooldown;
 
         // set spawnpoint for coin and instantiate
-        Vector3 spawnPoint = transform.position + playerCam.transform.forward * 1.2f;
+        Vector3 spawnPoint = transform.position + playerCam.transform.forward * 1.5f;
         GameObject coin = GameObject.Instantiate(coinObj, position: spawnPoint, Quaternion.Euler(90, 0, 0));
 
         // get coin rigidbody
@@ -310,9 +311,7 @@ public class playerBehavior : MonoBehaviour
         {
             if (Vector3.Distance(other.transform.position, transform.position) < 1)
             {
-                soundFXManager.instance.PlayFXClip(dogAttack, transform);
-                Time.timeScale = 0;
-                print("end");
+                SceneManager.LoadScene("LoseScreen");
             }
         }
     }

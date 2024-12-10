@@ -3,7 +3,13 @@ guid: c4d240e6ca50892439d0447d1b33ea34
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - startMenu: {instanceID: 0}
+  - startGif: {instanceID: 0}
+  - startGifImage: {instanceID: 0}
+  - MulchSong: {fileID: 8300000, guid: 9dee84efa88419645bfd00042cf404c8, type: 3}
+  - CutsceneSound: {instanceID: 0}
+  - selectSFX: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

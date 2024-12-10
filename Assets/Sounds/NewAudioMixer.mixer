@@ -46,6 +46,8 @@ AudioMixerController:
   m_ExposedParameters:
   - guid: 0429cd8c03be6554484c78095cdee37f
     name: fxVol
+  - guid: ec791b6c268d3b1429215a565fa99f63
+    name: musVol
   m_AudioMixerGroupViews:
   - guids:
     - 9b274832afb9f9e478b876df4c17c9f0

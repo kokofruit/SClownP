@@ -1,15 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
+using UnityEngine.SceneManagement;
 
 public class exitBehavior : MonoBehaviour
 {
     GameObject player;
     CapsuleCollider playerBody;
     playerBehavior playerScript;
-
-    public CanvasGroup winScreen;
-    public CanvasGroup hud;
 
     private void Start()
     {
@@ -22,14 +21,8 @@ public class exitBehavior : MonoBehaviour
     {
         if (other == playerBody && keyManager.instance.playerHasKey)
         {
-            winGame();
+            SceneManager.LoadScene("WinScreen");
         }
     }
 
-    void winGame()
-    {
-        hud.alpha = 0;
-        winScreen.alpha = 1;
-        Time.timeScale = 0;
-    }
 }

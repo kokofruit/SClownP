@@ -173,3 +173,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   landSound: {fileID: 8300000, guid: cbe9ebf9d025d2646a726c79ede011e2, type: 3}
+  disappearSound: {fileID: 8300000, guid: ff0d148d36420b84b830ba13a257a68b, type: 3}
