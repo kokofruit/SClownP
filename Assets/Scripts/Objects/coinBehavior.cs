@@ -9,12 +9,14 @@ public class coinBehavior : MonoBehaviour
     SphereCollider coinRad;
 
     [SerializeField] AudioClip landSound;
+    [SerializeField] AudioClip disappearSound;
 
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         coinRad = GetComponent<SphereCollider>();
+        Destroy(gameObject, 10f);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -25,7 +27,11 @@ public class coinBehavior : MonoBehaviour
             //int amount = collision.contactCount;
             coinRad.radius = 13f;
             soundFXManager.instance.PlayFXClip(landSound, transform);
-            Destroy(gameObject, 4f);
         }
+    }
+
+    private void OnDestroy()
+    {
+        soundFXManager.instance.PlayFXClip(disappearSound, transform, volume:0.25f);
     }
 }

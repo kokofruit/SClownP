@@ -23,15 +23,18 @@ public class cabinetBehavior : MonoBehaviour, interactInterface
 
     public void search()
     {
-        // sound fx
-        if (!isOpen) soundFXManager.instance.PlayRandomPitch(drawerRummageFX[Random.Range(0, drawerRummageFX.Length)], transform, 0.2f, volume: 0.5f);
-        else soundFXManager.instance.PlayRandomPitch(drawerCloseFX, transform, 0.2f);
+        if (!isMoving)
+        {
+            // sound fx
+            if (!isOpen) soundFXManager.instance.PlayRandomPitch(drawerRummageFX[Random.Range(0, drawerRummageFX.Length)], transform, 0.2f, volume: 0.5f);
+            else soundFXManager.instance.PlayRandomPitch(drawerCloseFX, transform, 0.2f);
 
-        float dir = isOpen ? 0.4f : -0.4f;
-        goal = transform.GetChild(0).position + (transform.forward * dir);
-        
-        isOpen = !isOpen;
-        isMoving = true;
+            float dir = isOpen ? 0.4f : -0.4f;
+            goal = transform.GetChild(0).position + (transform.forward * dir);
+
+            isOpen = !isOpen;
+            isMoving = true;
+        }
     }
 
     void doOpen()

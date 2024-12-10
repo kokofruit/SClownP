@@ -107,6 +107,7 @@ public class enemy939Behavior : MonoBehaviour
         if (other.gameObject == player)
         {
             ant.SetInteger("stateA", 2);
+
             currState = states.chasing;
             playerScript.currState = playerBehavior.states.locked;
         }
