@@ -452,6 +452,7 @@ GameObject:
   - component: {fileID: 8252874520311431551}
   - component: {fileID: 5137847441666136893}
   - component: {fileID: 7268718982081432186}
+  - component: {fileID: 2453735768159264464}
   m_Layer: 0
   m_Name: oDoor
   m_TagString: rDoor
@@ -487,7 +488,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe73ca545a668e448b1c33915df7188a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  openspeed: 3.5
+  openspeed: 200
   doorOpenFX: {fileID: 8300000, guid: 44c33859e28f3634ba415abbf3029412, type: 3}
 --- !u!65 &7268718982081432186
 BoxCollider:
@@ -510,3 +511,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.0893984, y: 3.1870737, z: 0.2640686}
   m_Center: {x: 1.0384164, y: 1.6162899, z: -0.012758255}
+--- !u!208 &2453735768159264464
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8955013450973915704}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1.0384164, y: 1.6162899, z: 0.00001}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 1.0384164, y: 1.6162899, z: -0.012758255}
+  m_TimeToStationary: 0.5

@@ -8,7 +8,7 @@ public class keyManager : MonoBehaviour
     public static keyManager instance;
 
     // Spawn Technique
-    float spawnStrat = 0;//Random.Range(0, 2);
+    float spawnStrat;
 
     // Spawning key
     [SerializeField] GameObject keycard;
@@ -34,6 +34,7 @@ public class keyManager : MonoBehaviour
 
     void Start()
     {
+        spawnStrat = Random.Range(0, 2);
         if (spawnStrat == 1) //Location based
         {
             spawnKeyOpen();
@@ -48,10 +49,7 @@ public class keyManager : MonoBehaviour
 
     void spawnKeyOpen()
     {
-        //Transform randSpawnRoom = getRandomChild(openSpawnPoints.transform);
-        //Transform randSpawnPoint = getRandomChild(randSpawnRoom);
         Transform randSpawnPoint = getRandomChild(openSpawnPoints.transform);
-        //transform.position = new Vector3(randSpawnPoint.position.x, randSpawnPoint.position.y + 2, randSpawnPoint.position.z);
         Quaternion randRotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
 
         GameObject key = Instantiate(keycard, position: randSpawnPoint.position, randRotation, parent: keyParent.transform);

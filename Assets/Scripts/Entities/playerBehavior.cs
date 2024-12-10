@@ -43,6 +43,7 @@ public class playerBehavior : MonoBehaviour
     [SerializeField] AudioClip coinFlickSound;
     [SerializeField] AudioClip dogAttack;
     [SerializeField] AudioClip keySound;
+    public AudioSource stepPlayer;
 
     #endregion
     void Awake()
@@ -164,7 +165,10 @@ public class playerBehavior : MonoBehaviour
             switch (obj.tag)
             {
                 case "key":
-                    if (mousePressed) takeKeyCard(obj);
+                    if (mousePressed) {
+                        obj.SetActive(false);
+                        takeKeyCard();
+                    }
                     break;
                 case "rDoor":
                     if (mousePressed)
@@ -177,7 +181,7 @@ public class playerBehavior : MonoBehaviour
                     if (mousePressed)
                     {
                         gateBehavior gateScript = obj.GetComponent<gateBehavior>();
-                        gateScript.gateOpen();
+                        if (!gateScript.isLocked) gateScript.gateOpen();
                     }
                     break;
                 case "eDoor":
@@ -200,9 +204,7 @@ public class playerBehavior : MonoBehaviour
                         keyManager keyMng = keyManager.instance;
                         if (!keyMng.playerHasKey && obj == keyMng.storedCabinet)
                         {
-                            keyMng.playerHasKey = true;
-                            uiManager.instance.showKeyGot();
-                            soundFXManager.instance.PlayFXClip(keySound, transform);
+                            takeKeyCard();
                         }
                     }
                     break;
@@ -228,12 +230,16 @@ public class playerBehavior : MonoBehaviour
         }
     }
 
-    void takeKeyCard(GameObject obj)
+    void takeKeyCard()
     {
-        //Destroy(obj);
-        obj.SetActive(false);
         keyManager.instance.playerHasKey = true;
         uiManager.instance.showKeyGot();
+        soundFXManager.instance.PlayFXClip(keySound, transform);
+        if (textBoxManager.instance.interactionTexts.ContainsKey("NeedKeycard")) textBoxManager.instance.interactionTexts.Remove("NeedKeycard");
+        foreach (gateBehavior gate in FindObjectsOfType<gateBehavior>())
+        {
+            gate.isLocked = false;
+        }
     }
 
     public void highlight(GameObject obj)

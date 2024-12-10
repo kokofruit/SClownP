@@ -43,7 +43,7 @@ public class cabinetBehavior : MonoBehaviour, interactInterface
             return;
         }
 
-        Vector3 pos = Vector3.MoveTowards(kid1.position, goal, moveSpeed);
+        Vector3 pos = Vector3.MoveTowards(kid1.position, goal, moveSpeed * Time.deltaTime);
         foreach (Transform child in transform)
         {
             child.position = new Vector3(pos.x, child.position.y, pos.z);
