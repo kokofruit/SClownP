@@ -21,11 +21,14 @@ public class gateBehavior : MonoBehaviour, interactInterface
     [SerializeField] AudioClip gateOpenFX;
     [SerializeField] AudioClip elevatorFX;
 
+    public bool isLocked;
+
     void Start()
     {
         isGate = tag == "uGate";
         startPos = transform.position;
         height = GetComponent<Renderer>().bounds.size.y;
+        print(height);
     }
 
     void Update()
@@ -69,13 +72,14 @@ public class gateBehavior : MonoBehaviour, interactInterface
             return;
         }
 
-        Vector3 pos = Vector3.MoveTowards(transform.position, goal, openspeed);
+        Vector3 pos = Vector3.MoveTowards(transform.position, goal, openspeed * Time.deltaTime);
         transform.position = pos;
     }
 
     public void getLMBVal()
     {
-        string displayText = isOpen ? (isGate ? "Close" : "") : "Open";
+        //string displayText = isOpen ? (isGate ? "Close" : "") : "Open";
+        string displayText = isGate ? (isLocked ? "Locked" : (isOpen ? "Close" : "Open")) : "Open";
         
         uiManager.instance.displayLMB(displayText);
     }

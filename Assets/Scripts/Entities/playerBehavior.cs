@@ -43,6 +43,7 @@ public class playerBehavior : MonoBehaviour
     [SerializeField] AudioClip coinFlickSound;
     [SerializeField] AudioClip dogAttack;
     [SerializeField] AudioClip keySound;
+    public AudioSource stepPlayer;
 
     #endregion
     void Awake()
@@ -180,7 +181,7 @@ public class playerBehavior : MonoBehaviour
                     if (mousePressed)
                     {
                         gateBehavior gateScript = obj.GetComponent<gateBehavior>();
-                        gateScript.gateOpen();
+                        if (!gateScript.isLocked) gateScript.gateOpen();
                     }
                     break;
                 case "eDoor":
@@ -235,6 +236,10 @@ public class playerBehavior : MonoBehaviour
         uiManager.instance.showKeyGot();
         soundFXManager.instance.PlayFXClip(keySound, transform);
         if (textBoxManager.instance.interactionTexts.ContainsKey("NeedKeycard")) textBoxManager.instance.interactionTexts.Remove("NeedKeycard");
+        foreach (gateBehavior gate in FindObjectsOfType<gateBehavior>())
+        {
+            gate.isLocked = false;
+        }
     }
 
     public void highlight(GameObject obj)

@@ -41,6 +41,7 @@ public class enemy939Behavior : MonoBehaviour
     // sound
     [SerializeField] AudioClip distractedGrowl;
     [SerializeField] AudioClip chasingGrowl;
+    public AudioSource stepPlayer;
 
     #endregion
 
@@ -156,7 +157,7 @@ public class enemy939Behavior : MonoBehaviour
             ant.SetInteger("stateA", 0);
             currState = states.idle;
         }
-        soundFXManager.instance.PlayFootStep("939", "crouch");
+        soundFXManager.instance.PlayFootStep("939", "crouch", stepPlayer);
     }
 
     Vector3 RandomNavSphere(Vector3 origin, float distance, LayerMask layerMask)
@@ -178,7 +179,7 @@ public class enemy939Behavior : MonoBehaviour
         nma.SetDestination(coin.transform.position);
         nma.stoppingDistance = 2f;
         nma.speed = 2f;
-        soundFXManager.instance.PlayFootStep("939", "walk");
+        soundFXManager.instance.PlayFootStep("939", "walk", stepPlayer);
 
         if (Vector3.Distance(transform.position, nma.destination) < 2f)
         {
@@ -204,9 +205,13 @@ public class enemy939Behavior : MonoBehaviour
         nma.SetDestination(player.transform.position);
         nma.stoppingDistance = 0f;
         nma.speed = 3f;
-        soundFXManager.instance.PlayFootStep("939", "sprint");
+        soundFXManager.instance.PlayFootStep("939", "sprint", stepPlayer);
     }
 
     #endregion
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        print(collision.gameObject.name);
+    }
 }

@@ -13,7 +13,6 @@ public class soundFXManager : MonoBehaviour
     [SerializeField] AudioMixerGroup fxMixer;
     [SerializeField] AudioClip[] mulchSteps;
     [SerializeField] AudioClip[] scpSteps;
-    [SerializeField] AudioSource[] stepPlayers;
 
     void Awake()
     {
@@ -52,10 +51,9 @@ public class soundFXManager : MonoBehaviour
         Destroy(audioSource.gameObject, clipLength);
     }
 
-    public void PlayFootStep(string creature, string speed)
+    public void PlayFootStep(string creature, string speed, AudioSource stepPlayer)
     {
         // Choose source
-        AudioSource stepPlayer = creature == "mulch" ? stepPlayers[0] : stepPlayers[1];
         if (!stepPlayer.isPlaying)
         {
             // Choose random clip from list
