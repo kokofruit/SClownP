@@ -186,7 +186,6 @@ MonoBehaviour:
   fxMixer: {fileID: 2862221588429479656, guid: 7541e1d8588e60746b3f760e51048d3f, type: 2}
   mulchSteps: []
   scpSteps: []
-  stepPlayers: []
 --- !u!1 &514719528
 GameObject:
   m_ObjectHideFlags: 0
@@ -242,14 +241,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.21051998, g: 0.20912927, b: 0.21383637, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: a489006fb8a436d45a01d00fb4190d10, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1116,10 +1115,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 514719529}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -474, y: -30}
-  m_SizeDelta: {x: -1394, y: -141}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -182.31, y: -42.6}
+  m_SizeDelta: {x: 526, y: 939}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1841738167
 MonoBehaviour:
